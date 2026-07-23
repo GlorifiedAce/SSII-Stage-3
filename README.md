@@ -51,4 +51,4 @@ Full sources and our interview write-ups are in the Stage 2 submission, not repe
 
 ## Credits
 
-Made by Group 7, 4i1, for the SS II Issue Investigation.
+Made by Group 7, 4i1, for SSII Stage 3 
