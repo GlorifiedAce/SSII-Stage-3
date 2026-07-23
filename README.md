@@ -2,7 +2,7 @@
 
 A branching interactive story about how globalisation is affecting small and medium enterprises (SMEs) in Singapore — built for our Social Studies Issue Investigation, Stage 3.
 
-**Play it here:** _add your GitHub Pages link once it's live_
+**Play it here:** _https://glorifiedace.github.io/SSII-Stage-3/_
 
 ---
 
