@@ -29,7 +29,7 @@ That's why we went with a branching story instead of a slide deck or essay. Ther
 
 Animated characters, hand-built backgrounds, dialogue that changes each character's expression, camera pans and zooms, background music and sound effects generated in the browser, and a few branch points that lead to different endings.
 
-Made with plain HTML/CSS/JS
+Made with plain HTML
 
 ## How this ties back to our research
 
