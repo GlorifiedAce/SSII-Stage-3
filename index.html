@@ -4,646 +4,476 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Globalisation Ledger — Run an SME</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌏</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --ink:#0e1a24;
-    --ink-2:#162a3c;
-    --paper:#ecdfc0;
-    --paper-dim:#d8c69d;
-    --rust:#b35d2e;
-    --rust-dim:#8a4520;
-    --stamp:#9c2e22;
-    --teal:#3c7a72;
-    --teal-bright:#5fb3a8;
-    --gold:#c99a3a;
-    --ok:#7a9b5e;
-    --bad:#b35d2e;
-    --line: rgba(236,223,192,0.14);
-    --shadow: 0 18px 40px rgba(0,0,0,0.4);
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:
-      repeating-linear-gradient(0deg, rgba(236,223,192,0.025) 0 1px, transparent 1px 64px),
-      repeating-linear-gradient(90deg, rgba(236,223,192,0.025) 0 1px, transparent 1px 64px),
-      radial-gradient(circle at 15% 10%, rgba(95,179,168,0.10), transparent 42%),
-      radial-gradient(circle at 85% 90%, rgba(179,93,46,0.12), transparent 48%),
-      var(--ink);
-    color:var(--paper);
-    font-family:'Newsreader', serif;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    padding:28px 16px 60px;
-  }
-  .app{
-    width:100%;
-    max-width:760px;
-  }
-  h1,h2,h3, .display{
-    font-family:'Oswald', sans-serif;
-    text-transform:uppercase;
-    letter-spacing:0.04em;
-  }
-  .mono{ font-family:'IBM Plex Mono', monospace; }
+:root{
+  --ink:#e9edf6;
+  --ink-2:#8d97ac;
+  --paper:#121a2c;
+  --paper-dim:#0e1526;
+  --paper-page:#0a0f1c;
+  --rust:#ff6b5e;
+  --rust-dim:#4a2622;
+  --stamp:#ff8a5b;
+  --teal:#35c9c1;
+  --teal-bright:#4fe0d6;
+  --gold:#e0a72e;
+  --gold-bright:#f4c430;
+  --ok:#4ade80;
+  --bad:#ff6b5e;
+  --line: rgba(255,255,255,0.10);
+  --shadow: 0 2px 10px rgba(0,0,0,0.35);
+  --shadow-md: 0 10px 30px rgba(0,0,0,0.5);
+  --glow-teal: 0 0 16px rgba(79,224,214,0.25);
+  --glow-gold: 0 0 18px rgba(244,196,48,0.3);
+  --radius: 14px;
+}
+* { box-sizing: border-box; }
+body {
+  background:
+    radial-gradient(circle at 18% -10%, #1a2740 0%, transparent 45%),
+    radial-gradient(circle at 100% 100%, #14233a 0%, transparent 50%),
+    var(--paper-page);
+  color: var(--ink);
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 28px 16px 60px;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+.bg-network{
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.55;
+  pointer-events: none;
+}
+.app {
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+h1, h2, h3, h4 {
+  font-family: 'Space Grotesk', Arial, Helvetica, sans-serif;
+}
+.mono {
+  font-family: "IBM Plex Mono", "Courier New", monospace;
+}
 
-  /* ---------- Masthead ---------- */
-  .masthead{
-    display:flex;
-    align-items:baseline;
-    justify-content:space-between;
-    border-bottom:2px solid var(--paper);
-    padding-bottom:10px;
-    margin-bottom:22px;
-  }
-  .masthead .title{
-    font-size:1.5rem;
-    font-weight:700;
-    letter-spacing:0.03em;
-  }
-  .masthead .sub{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.7rem;
-    color:var(--paper-dim);
-    text-transform:none;
-    letter-spacing:0.02em;
-  }
-  .masthead-right{
-    display:flex;
-    flex-direction:column;
-    align-items:flex-end;
-    gap:7px;
-  }
-  .sound-toggle{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.62rem;
-    letter-spacing:0.05em;
-    text-transform:uppercase;
-    background:transparent;
-    border:1px solid var(--paper-dim);
-    color:var(--paper-dim);
-    padding:4px 9px;
-    border-radius:20px;
-    cursor:pointer;
-    transition: border-color .15s ease, color .15s ease;
-    white-space:nowrap;
-  }
-  .sound-toggle:hover{ border-color:var(--gold); color:var(--gold); }
-  .sound-toggle.on{ border-color:var(--teal-bright); color:var(--teal-bright); }
-  .sound-toggle.on .eq span{ animation-play-state:running; }
-  .sound-toggle .eq{ display:inline-flex; gap:2px; margin-right:5px; vertical-align:middle; }
-  .sound-toggle .eq span{
-    display:inline-block; width:2px; height:7px; background:currentColor;
-    animation: eqBounce 0.9s ease-in-out infinite; animation-play-state:paused;
-  }
-  .sound-toggle .eq span:nth-child(2){ animation-delay:0.15s; }
-  .sound-toggle .eq span:nth-child(3){ animation-delay:0.3s; }
-  @keyframes eqBounce{ 0%,100%{ transform:scaleY(0.4); } 50%{ transform:scaleY(1.4); } }
+/* header */
+.masthead {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+  margin-bottom: 24px;
+  animation: fade-down 0.5s ease;
+}
+.masthead-top{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.masthead .title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  background: linear-gradient(90deg, var(--ink) 40%, var(--teal-bright));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.masthead .sub {
+  font-size: 11px;
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+.music-btn{
+  flex-shrink: 0;
+  background: var(--paper-dim);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: 9px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+.music-btn:hover{ border-color: var(--teal-bright); box-shadow: var(--glow-teal); transform: translateY(-1px); }
+.music-btn:active{ transform: translateY(0) scale(0.94); }
+.ticker{
+  overflow: hidden;
+  white-space: nowrap;
+  margin-top: 10px;
+  border-top: 1px dashed var(--line);
+  padding-top: 7px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+}
+.ticker-track{
+  display: inline-block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.07em;
+  color: var(--teal-bright);
+  opacity: 0.85;
+  animation: ticker-scroll 26s linear infinite;
+}
 
-  /* ---------- Manifest sheet (card) ---------- */
-  .sheet{
-    background: var(--ink-2);
-    border:1px solid var(--line);
-    border-radius:2px;
-    box-shadow: var(--shadow);
-    position:relative;
-    padding:28px 26px 26px;
-    margin-bottom:20px;
-    overflow:hidden;
-  }
-  .sheet::before{
-    content:"";
-    position:absolute; top:0; left:0; right:0; height:5px;
-    background: repeating-linear-gradient(90deg, var(--rust) 0 14px, transparent 14px 22px);
-    opacity:0.55;
-  }
-  .tab{
-    position:absolute;
-    top:14px; right:18px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.68rem;
-    letter-spacing:0.08em;
-    color:var(--gold);
-    border:1px solid var(--gold);
-    padding:3px 8px;
-    border-radius:2px;
-    transform:rotate(2deg);
-  }
+/* the "sheet" card */
+.sheet {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px 22px 20px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+.sheet::before{
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teal-bright), var(--gold-bright));
+}
+.tab {
+  font-size: 10.5px;
+  font-weight: 700;
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: 0.09em;
+  color: var(--teal-bright);
+  background: rgba(79,224,214,0.10);
+  border: 1px solid rgba(79,224,214,0.3);
+  border-radius: 6px;
+  padding: 3px 8px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
 
-  /* ---------- Intro ---------- */
-  .lede{
-    font-size:1.02rem;
-    line-height:1.65;
-    color:var(--paper);
-    margin-bottom:14px;
-  }
-  .lede b{color:var(--gold); font-weight:600;}
-  .footnote{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.72rem;
-    color:var(--paper-dim);
-    line-height:1.6;
-    border-top:1px dashed var(--line);
-    padding-top:12px;
-    margin-top:16px;
-  }
-  .btn-row{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
-  .btn{
-    font-family:'Oswald', sans-serif;
-    text-transform:uppercase;
-    letter-spacing:0.05em;
-    font-size:0.85rem;
-    font-weight:600;
-    background:transparent;
-    color:var(--paper);
-    border:1.5px solid var(--paper);
-    padding:12px 18px;
-    border-radius:2px;
-    cursor:pointer;
-    transition:all .15s ease;
-    text-align:left;
-  }
-  .btn:hover{ background:var(--paper); color:var(--ink); }
-  .btn:focus-visible{ outline:2px solid var(--teal-bright); outline-offset:2px; }
-  .btn.primary{ border-color:var(--rust); color:var(--rust); }
-  .btn.primary:hover{ background:var(--rust); color:var(--paper); }
-  .btn .small{
-    display:block;
-    font-family:'Newsreader', serif;
-    text-transform:none;
-    letter-spacing:normal;
-    font-weight:400;
-    font-size:0.82rem;
-    margin-top:4px;
-    opacity:0.85;
-  }
+.lede {
+  font-size: 15px;
+  line-height: 1.55;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+.lede b { color: var(--gold-bright); }
+.footnote {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  border-top: 1px dashed var(--line);
+  padding-top: 10px;
+  margin-top: 14px;
+}
+.btn-row {
+  margin-top: 18px;
+}
+.btn-row .btn { display: block; width: 100%; margin-bottom: 10px; }
+.btn {
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 14.5px;
+  background: var(--paper-dim);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+.btn:hover {
+  background: #16203a;
+  border-color: var(--teal-bright);
+  box-shadow: var(--glow-teal);
+  transform: translateY(-1px);
+}
+.btn:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: none;
+}
+.btn.primary {
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  color: #251803;
+  font-weight: 700;
+  border: 1px solid var(--gold);
+  box-shadow: var(--glow-gold);
+}
+.btn.primary:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 0 26px rgba(244,196,48,0.45);
+}
+.btn .small {
+  display: block;
+  font-weight: normal;
+  font-size: 12px;
+  color: var(--ink-2);
+}
 
-  /* ---------- Industry picker ---------- */
-  .industry-grid{ display:grid; gap:14px; }
-  .industry-card{
-    border:1.5px solid var(--line);
-    background:var(--ink);
-    border-radius:2px;
-    padding:16px 18px;
-    cursor:pointer;
-    transition: border-color .15s ease, transform .15s ease;
-  }
-  .industry-card:hover{ border-color:var(--teal-bright); transform:translateX(3px); }
-  .industry-card h3{ margin:0 0 6px; font-size:1.05rem; color:var(--gold); }
-  .industry-card p{ margin:0; font-size:0.92rem; line-height:1.5; color:var(--paper); opacity:0.9; }
-  .industry-card .who{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.68rem;
-    color:var(--teal-bright);
-    letter-spacing:0.03em;
-    margin-top:8px;
-    display:block;
-  }
+/* industry picker */
+.industry-grid { }
+.industry-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  background: var(--paper);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.industry-card:hover {
+  background: #16203a;
+  border-color: var(--teal-bright);
+  box-shadow: var(--glow-teal), var(--shadow-md);
+  transform: translateY(-2px);
+}
+.industry-card:active { transform: translateY(0) scale(0.99); }
+.industry-card:focus-visible {
+  outline: 2px solid var(--teal-bright);
+  outline-offset: 2px;
+}
+.industry-card h3 { margin: 0 0 4px; font-size: 16.5px; font-weight: 600; color: var(--ink); }
+.industry-card p { margin: 0; font-size: 13.5px; line-height: 1.45; color: var(--ink-2); }
+.industry-card .who {
+  font-size: 11.5px;
+  color: var(--teal-bright);
+  font-weight: 500;
+  display: block;
+  margin-top: 7px;
+}
+.industry-card { display: table; width: 100%; }
+.industry-icon {
+  display: table-cell;
+  width: 42px;
+  font-size: 24px;
+  vertical-align: top;
+  padding-right: 10px;
+}
+.industry-body { display: table-cell; }
 
-  /* ---------- Status bar ---------- */
-  .statusbar{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:1px;
-    background:var(--line);
-    border:1px solid var(--line);
-    border-radius:2px;
-    overflow:hidden;
-    margin-bottom:18px;
-  }
-  .stat{
-    background:var(--ink-2);
-    padding:12px 10px;
-    text-align:center;
-  }
-  .stat .label{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.62rem;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    color:var(--paper-dim);
-    display:block;
-    margin-bottom:4px;
-  }
-  .stat .value{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:1.15rem;
-    font-weight:600;
-  }
-  .stat .delta{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.68rem;
-    display:block;
-    margin-top:2px;
-    min-height:14px;
-  }
-  .delta.up{ color:var(--ok); }
-  .delta.down{ color:var(--bad); }
-  .year-pill{
-    display:inline-block;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.72rem;
-    letter-spacing:0.08em;
-    color:var(--ink);
-    background:var(--gold);
-    padding:3px 10px;
-    border-radius:20px;
-    margin-bottom:12px;
-  }
+/* status bar - 3 cards side by side */
+.statusbar {
+  width: 100%;
+  margin-bottom: 18px;
+  display: flex;
+  gap: 10px;
+}
+.stat {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 8px;
+  text-align: center;
+  flex: 1;
+  background: var(--paper-dim);
+  transition: box-shadow 0.2s ease;
+}
+.stat .label {
+  font-size: 10.5px;
+  color: var(--ink-2);
+  display: block;
+  margin-bottom: 2px;
+}
+.stat .value {
+  font-size: 17px;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--ink);
+}
+.stat .delta {
+  font-size: 11px;
+  font-family: "IBM Plex Mono", monospace;
+  display: block;
+  min-height: 14px;
+}
+.delta.up { color: var(--ok); }
+.delta.down { color: var(--bad); }
+.stat.pulse { animation: pulse-glow 0.7s ease; }
+.bar-track {
+  height: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 3px;
+  background: var(--teal-bright);
+  box-shadow: 0 0 6px rgba(79,224,214,0.6);
+  transition: width 0.7s cubic-bezier(.22,.9,.3,1);
+}
+.stat.sustainability-stat .bar-fill { background: var(--gold-bright); box-shadow: 0 0 6px rgba(244,196,48,0.6); }
 
-  /* ---------- Scenario ---------- */
-  .scenario-title{
-    font-size:1.15rem;
-    color:var(--paper);
-    margin:6px 0 10px;
-  }
-  .scenario-body{
-    font-size:1rem;
-    line-height:1.65;
-    margin-bottom:20px;
-  }
-  .options{ display:grid; gap:10px; }
+.year-pill {
+  display: inline-block;
+  font-size: 12px;
+  font-family: "IBM Plex Mono", monospace;
+  background: var(--paper-dim);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 4px 12px;
+  margin-bottom: 12px;
+  color: var(--ink-2);
+}
 
-  /* ---------- Outcome / stamp ---------- */
-  .outcome-wrap{ text-align:center; }
-  .stamp{
-    display:inline-block;
-    border:3px solid var(--stamp);
-    color:var(--stamp);
-    border-radius:50%;
-    width:150px; height:150px;
-    display:flex; align-items:center; justify-content:center;
-    transform:rotate(-9deg);
-    margin:6px auto 18px;
-    position:relative;
-  }
-  .stamp::before, .stamp::after{
-    content:"";
-    position:absolute;
-    border:1px solid var(--stamp);
-    border-radius:50%;
-    inset:8px;
-  }
-  .stamp .stamp-text{
-    font-family:'Oswald', sans-serif;
-    text-transform:uppercase;
-    font-weight:700;
-    font-size:0.82rem;
-    letter-spacing:0.06em;
-    line-height:1.3;
-  }
-  .outcome-text{
-    font-size:1rem;
-    line-height:1.65;
-    text-align:left;
-    margin-bottom:14px;
-  }
-  .effect-line{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.85rem;
-    text-align:left;
-    margin:3px 0;
-  }
-  .effect-line.up{ color:var(--ok); }
-  .effect-line.down{ color:var(--bad); }
+/* scenario */
+.scenario-title { font-size: 19px; font-weight: 600; margin: 5px 0 8px; color: var(--ink); }
+.scenario-body { font-size: 15px; line-height: 1.55; margin-bottom: 16px; color: var(--ink); }
+.options { }
 
-  /* ---------- Final report ---------- */
-  .verdict{
-    font-size:1.35rem;
-    color:var(--gold);
-    margin:4px 0 6px;
-  }
-  .verdict-sub{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.78rem;
-    color:var(--paper-dim);
-    margin-bottom:18px;
-  }
-  svg text{ font-family:'IBM Plex Mono', monospace; }
-  .insight-block{
-    border-left:3px solid var(--teal);
-    padding-left:14px;
-    margin:14px 0;
-  }
-  .insight-block h4{
-    margin:0 0 4px;
-    font-size:0.88rem;
-    color:var(--teal-bright);
-    letter-spacing:0.03em;
-  }
-  .insight-block p{ margin:0; font-size:0.92rem; line-height:1.55; }
-  .quote{
-    font-style:italic;
-    color:var(--paper);
-    opacity:0.9;
-  }
-  .cite{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.68rem;
-    color:var(--paper-dim);
-  }
+/* outcome */
+.outcome-wrap { text-align: center; }
+.stamp {
+  display: inline-block;
+  border: 4px solid var(--stamp);
+  color: var(--stamp);
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  line-height: 110px;
+  margin: 12px auto;
+  font-weight: bold;
+  transform: rotate(-6deg);
+  animation: stamp-in 0.55s cubic-bezier(.34,1.56,.64,1);
+  box-shadow: 0 0 30px rgba(255,138,91,0.3), inset 0 0 12px rgba(255,138,91,0.15);
+}
+.stamp-text { font-family: 'Space Grotesk', sans-serif; font-size: 15px; letter-spacing: 0.03em; }
+.outcome-text {
+  font-size: 14.5px;
+  line-height: 1.55;
+  text-align: left;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+.effect-line {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 13px;
+  text-align: left;
+  margin: 4px 0;
+}
+.effect-line.up { color: var(--ok); }
+.effect-line.down { color: var(--bad); }
 
-  /* ---------- Ambient background: trade routes ---------- */
-  .bg-decor{
-    position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none;
-  }
-  .bg-decor .drift{
-    position:absolute; font-size:1.4rem; opacity:0.16; filter:grayscale(0.2);
-    animation: driftAcross linear infinite;
-  }
-  @keyframes driftAcross{
-    from{ transform:translateX(-8vw) translateY(0); }
-    to{ transform:translateX(108vw) translateY(-18px); }
-  }
+/* final report */
+.verdict { font-size: 21px; color: var(--gold-bright); margin: 5px 0; font-weight: 700; }
+.verdict-sub { font-size: 12.5px; color: var(--ink-2); margin-bottom: 16px; line-height: 1.5; }
+.insight-block {
+  border-left: 3px solid var(--teal-bright);
+  padding: 2px 0 2px 14px;
+  margin: 14px 0;
+}
+.insight-block h4 { margin: 0 0 5px; font-size: 13.5px; color: var(--teal-bright); font-weight: 600; }
+.insight-block p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--ink); }
+.quote { font-style: italic; color: var(--ink); }
+.cite { font-size: 11px; color: var(--ink-2); }
+.verdict-seal { font-size: 22px; margin-right: 4px; }
 
-  /* ---------- Masthead flourish ---------- */
-  .masthead .title{ display:flex; align-items:center; gap:10px; }
-  .globe-spin{
-    display:inline-block;
-    animation: slowSpin 14s linear infinite;
-    font-size:1.15rem;
-  }
-  @keyframes slowSpin{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+/* chart line draw-in */
+.chart-path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw-line 1.1s ease forwards;
+  filter: drop-shadow(0 0 3px rgba(79,224,214,0.5));
+}
 
-  /* ---------- Screen transition ---------- */
-  #screen > *{ animation: sheetIn .45s cubic-bezier(.2,.7,.3,1) both; }
-  @keyframes sheetIn{
-    from{ opacity:0; transform:translateY(10px); }
-    to{ opacity:1; transform:translateY(0); }
-  }
+/* screen transition wrapper */
+.screen-fade {
+  animation: screen-in 0.4s ease;
+}
 
-  /* ---------- Industry icon badge ---------- */
-  .industry-card{ display:flex; gap:14px; align-items:flex-start; }
-  .industry-icon{
-    flex:none;
-    width:44px; height:44px;
-    border-radius:50%;
-    border:1.5px solid var(--teal-bright);
-    background:var(--ink-2);
-    display:flex; align-items:center; justify-content:center;
-    font-size:1.3rem;
-    transition:transform .2s ease;
-  }
-  .industry-card:hover .industry-icon{ transform:scale(1.12) rotate(-6deg); }
-  .industry-body{ flex:1; }
+@keyframes screen-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-down {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 0 rgba(79,224,214,0); transform: scale(1); }
+  35% { box-shadow: 0 0 16px rgba(79,224,214,0.35); transform: scale(1.035); }
+  100% { box-shadow: 0 0 0 rgba(79,224,214,0); transform: scale(1); }
+}
+@keyframes stamp-in {
+  0% { transform: scale(0.4) rotate(-24deg); opacity: 0; }
+  60% { transform: scale(1.08) rotate(2deg); opacity: 1; }
+  100% { transform: scale(1) rotate(-6deg); opacity: 1; }
+}
+@keyframes draw-line {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
 
-  /* ---------- Trade-route year tracker ---------- */
-  .route-tracker{ margin:2px 0 16px; }
-  .route-track{
-    position:relative; height:34px; margin:0 4px;
+@media (prefers-reduced-motion: reduce){
+  .screen-fade, .masthead, .stat.pulse, .stamp, .chart-path, .btn, .industry-card, .ticker-track {
+    animation: none !important;
+    transition: none !important;
   }
-  .route-line{
-    position:absolute; top:50%; left:0; right:0; height:2px;
-    background: repeating-linear-gradient(90deg, var(--paper-dim) 0 6px, transparent 6px 11px);
-    transform:translateY(-50%);
-    opacity:0.5;
-  }
-  .route-line-fill{
-    position:absolute; top:50%; left:0; height:2px;
-    background: var(--teal-bright);
-    transform:translateY(-50%);
-    width:0%;
-    transition: width 1.1s cubic-bezier(.2,.7,.2,1);
-    box-shadow:0 0 6px rgba(72,163,157,0.6);
-  }
-  .route-port{
-    position:absolute; top:50%; width:14px; height:14px;
-    border-radius:50%; transform:translate(-50%,-50%);
-    background:var(--ink); border:2px solid var(--paper-dim);
-    transition: background .3s ease, border-color .3s ease;
-  }
-  .route-port.reached{ background:var(--teal-bright); border-color:var(--teal-bright); }
-  .route-port.now{ box-shadow:0 0 0 4px rgba(72,163,157,0.25); }
-  .route-ship{
-    position:absolute; top:50%; transform:translate(-50%,-58%);
-    font-size:1.15rem; left:0%;
-    transition: left 1.1s cubic-bezier(.2,.7,.2,1);
-  }
-  .route-labels{
-    display:flex; justify-content:space-between;
-    font-family:'IBM Plex Mono', monospace; font-size:0.62rem;
-    color:var(--paper-dim); margin-top:4px; letter-spacing:0.04em;
-  }
+}
 
-  /* ---------- Status bar micro-motion ---------- */
-  .stat{ position:relative; }
-  .stat.pulse .value{ animation: valuePulse .6s ease; }
-  @keyframes valuePulse{
-    0%{ transform:scale(1); }
-    35%{ transform:scale(1.16); color:var(--gold); }
-    100%{ transform:scale(1); }
-  }
-  .stat .value{ display:inline-block; }
-
-  /* ---------- Stamp slam ---------- */
-  .stamp{ animation: stampSlam .5s cubic-bezier(.2,.9,.25,1.3) both; }
-  @keyframes stampSlam{
-    0%{ opacity:0; transform:scale(2.4) rotate(-24deg); }
-    60%{ opacity:1; }
-    100%{ opacity:1; transform:scale(1) rotate(-9deg); }
-  }
-
-  /* ---------- Outcome burst ---------- */
-  .burst-emoji{
-    position:absolute; font-size:1.1rem; opacity:0;
-    animation: burstUp 1.1s ease-out forwards;
-    pointer-events:none;
-  }
-  @keyframes burstUp{
-    0%{ opacity:0; transform:translateY(0) scale(0.6); }
-    15%{ opacity:1; }
-    100%{ opacity:0; transform:translateY(-60px) scale(1.1); }
-  }
-
-  /* ---------- Chart draw-in ---------- */
-  .chart-path{
-    stroke-dasharray:1; stroke-dashoffset:1;
-    animation: drawPath 1.6s ease forwards;
-  }
-  @keyframes drawPath{ to{ stroke-dashoffset:0; } }
-
-  .verdict-seal{ font-size:1.5rem; margin-right:6px; vertical-align:-2px; }
-
-  @media (max-width:480px){
-    .statusbar{ grid-template-columns:1fr; }
-    .stamp{ width:120px; height:120px; }
-    .bg-decor{ display:none; }
-  }
-  @media (prefers-reduced-motion: reduce){
-    .industry-card, .btn{ transition:none; }
-    .globe-spin, .drift, #screen > *, .stamp, .stat.pulse .value, .burst-emoji, .chart-path{ animation:none !important; }
-    .route-line-fill, .route-ship{ transition:none !important; }
-  }
+@media (max-width:480px){
+  .statusbar { display: block; }
+  .stat { display: block; margin-bottom: 8px; }
+}
 </style>
 </head>
 <body>
-<div class="bg-decor" aria-hidden="true">
-  <span class="drift" style="top:8%; animation-duration:52s; animation-delay:0s;">🚢</span>
-  <span class="drift" style="top:62%; animation-duration:64s; animation-delay:-20s;">✈️</span>
-  <span class="drift" style="top:34%; animation-duration:70s; animation-delay:-45s;">📦</span>
-  <span class="drift" style="top:80%; animation-duration:58s; animation-delay:-8s;">🚢</span>
-</div>
+<svg class="bg-network" aria-hidden="true" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="var(--teal-bright)" stroke-width="1" opacity="0.28">
+    <path d="M80,120 Q300,20 520,140 T760,90" />
+    <path d="M60,380 Q260,300 420,400 T740,340" />
+    <path d="M140,250 Q380,180 600,260 T780,220" />
+  </g>
+  <g fill="var(--gold-bright)" opacity="0.8">
+    <circle cx="80" cy="120" r="2.6"/>
+    <circle cx="520" cy="140" r="2.6"/>
+    <circle cx="760" cy="90" r="2.6"/>
+    <circle cx="60" cy="380" r="2.6"/>
+    <circle cx="420" cy="400" r="2.6"/>
+    <circle cx="740" cy="340" r="2.6"/>
+    <circle cx="140" cy="250" r="2.6"/>
+    <circle cx="600" cy="260" r="2.6"/>
+    <circle cx="780" cy="220" r="2.6"/>
+  </g>
+  <circle r="2.6" fill="#fff" opacity="0.9">
+    <animateMotion dur="7s" repeatCount="indefinite" path="M80,120 Q300,20 520,140 T760,90"/>
+  </circle>
+  <circle r="2.6" fill="#fff" opacity="0.9">
+    <animateMotion dur="9s" repeatCount="indefinite" path="M60,380 Q260,300 420,400 T740,340"/>
+  </circle>
+  <circle r="2.6" fill="#fff" opacity="0.9">
+    <animateMotion dur="8s" repeatCount="indefinite" path="M140,250 Q380,180 600,260 T780,220"/>
+  </circle>
+</svg>
 <div class="app">
   <div class="masthead">
-    <div class="title"><span class="globe-spin" aria-hidden="true">🌐</span>The Globalisation Ledger</div>
-    <div class="masthead-right">
-      <div class="sub">SS II · SIMULATION EXERCISE</div>
-      <button id="soundToggle" class="sound-toggle" onclick="toggleSound()" aria-pressed="false">
-        <span class="eq" aria-hidden="true"><span></span><span></span><span></span></span><span id="soundLabel">🔇 Sound off</span>
-      </button>
+    <div class="masthead-top">
+      <div>
+        <div class="title">🌐 The Globalisation Ledger</div>
+        <div class="sub">SS II · Simulation Exercise</div>
+      </div>
+      <button id="musicToggle" class="music-btn" onclick="toggleMusic()" title="Toggle background music" aria-label="Toggle background music">🔈</button>
     </div>
+    <div class="ticker" aria-hidden="true"><div class="ticker-track">⚓ SG ⇄ CN ⇄ US ⇄ EU &nbsp;·&nbsp; GLOBAL SUPPLY CHAINS &nbsp;·&nbsp; TRADE INDEX &nbsp;·&nbsp; SHIPPING LANES ACTIVE &nbsp;·&nbsp; TARIFFS · CURRENCY · LOGISTICS &nbsp;·&nbsp; ⚓ SG ⇄ CN ⇄ US ⇄ EU &nbsp;·&nbsp; GLOBAL SUPPLY CHAINS &nbsp;·&nbsp; TRADE INDEX &nbsp;·&nbsp; SHIPPING LANES ACTIVE &nbsp;·&nbsp; TARIFFS · CURRENCY · LOGISTICS &nbsp;·&nbsp;</div></div>
   </div>
   <div id="screen"></div>
 </div>
 
 <script>
-/* ============================================================
-   AUDIO — fully synthesised with Web Audio API (no files, no
-   copyrighted material). Master-toggled by the person; nothing
-   plays until they opt in, satisfying browser autoplay rules.
-   ============================================================ */
-const AudioEngine = (() => {
-  let ctx = null, master = null, musicOn = false;
-  let schedulerTimer = null, nextNoteTime = 0, stepIndex = 0;
-  const SCALE = [110.00,130.81,146.83,164.81,196.00,220.00]; // A minor pentatonic-ish, low & wandering
-  const PATTERN = [0,2,3,2,4,2,1,3,0,5,3,2]; // slow melodic loop, indices into SCALE
-  const STEP_DUR = 0.85;
-
-  function ensure(){
-    if(!ctx){
-      ctx = new (window.AudioContext || window.webkitAudioContext)();
-      master = ctx.createGain();
-      master.gain.value = 0.5;
-      master.connect(ctx.destination);
-    }
-    if(ctx.state === 'suspended') ctx.resume();
-    return ctx;
-  }
-
-  function tone(freq, start, dur, type, vol, filterFreq){
-    const c = ctx;
-    const osc = c.createOscillator();
-    osc.type = type || 'sine';
-    osc.frequency.value = freq;
-    const g = c.createGain();
-    g.gain.setValueAtTime(0.0001, start);
-    g.gain.linearRampToValueAtTime(vol, start + 0.04);
-    g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
-    let outNode = osc;
-    if(filterFreq){
-      const f = c.createBiquadFilter();
-      f.type = 'lowpass'; f.frequency.value = filterFreq;
-      osc.connect(f); f.connect(g);
-    } else {
-      osc.connect(g);
-    }
-    g.connect(master);
-    osc.start(start);
-    osc.stop(start + dur + 0.05);
-  }
-
-  function noiseBurst(start, dur, vol, filterFreq, filterType){
-    const c = ctx;
-    const n = Math.max(1, Math.floor(c.sampleRate * dur));
-    const buffer = c.createBuffer(1, n, c.sampleRate);
-    const data = buffer.getChannelData(0);
-    for(let i=0;i<n;i++){ data[i] = (Math.random()*2-1) * (1 - i/n); }
-    const src = c.createBufferSource();
-    src.buffer = buffer;
-    const f = c.createBiquadFilter();
-    f.type = filterType || 'lowpass'; f.frequency.value = filterFreq || 1200;
-    const g = c.createGain();
-    g.gain.setValueAtTime(vol, start);
-    g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
-    src.connect(f); f.connect(g); g.connect(master);
-    src.start(start);
-  }
-
-  function playStep(i, time){
-    const idx = PATTERN[i % PATTERN.length];
-    tone(SCALE[idx], time, STEP_DUR * 0.95, 'triangle', 0.075, 1600);
-    if(i % 6 === 0){ tone(SCALE[0] / 2, time, STEP_DUR * 6, 'sine', 0.05, 400); } // slow drone underneath
-    if(i % 3 === 1){ noiseBurst(time, 0.05, 0.02, 4200, 'highpass'); } // soft clockwork tick
-  }
-
-  function schedule(){
-    if(!ctx) return;
-    while(nextNoteTime < ctx.currentTime + 0.6){
-      playStep(stepIndex, nextNoteTime);
-      stepIndex += 1;
-      nextNoteTime += STEP_DUR;
-    }
-  }
-
-  function startLoop(){
-    ensure();
-    musicOn = true;
-    nextNoteTime = ctx.currentTime + 0.1;
-    stepIndex = 0;
-    schedule();
-    schedulerTimer = setInterval(schedule, 200);
-  }
-
-  function stopLoop(){
-    musicOn = false;
-    if(schedulerTimer){ clearInterval(schedulerTimer); schedulerTimer = null; }
-  }
-
-  function isOn(){ return musicOn; }
-
-  // ---- one-shot sound effects ----
-  function stampThud(good){
-    if(!musicOn) return; ensure();
-    const t = ctx.currentTime;
-    noiseBurst(t, 0.16, 0.3, 300, 'lowpass');
-    tone(good ? 120 : 75, t, 0.3, 'sine', 0.22, 380);
-  }
-  function coinChime(){
-    if(!musicOn) return; ensure();
-    const t = ctx.currentTime;
-    tone(1046.5, t, 0.22, 'triangle', 0.1);
-    tone(1318.5, t + 0.06, 0.22, 'triangle', 0.08);
-  }
-  function pageTurn(){
-    if(!musicOn) return; ensure();
-    noiseBurst(ctx.currentTime, 0.2, 0.14, 2600, 'highpass');
-  }
-  function shipBell(){
-    if(!musicOn) return; ensure();
-    const t = ctx.currentTime;
-    tone(880, t, 0.9, 'sine', 0.13, 3200);
-    tone(1320, t, 0.9, 'sine', 0.06, 3200);
-  }
-  function closeBell(){
-    if(!musicOn) return; ensure();
-    const t = ctx.currentTime;
-    tone(660, t, 1.1, 'sine', 0.12, 2800);
-    tone(880, t + 0.18, 1.1, 'sine', 0.09, 2800);
-  }
-
-  return { startLoop, stopLoop, isOn, stampThud, coinChime, pageTurn, shipBell, closeBell };
-})();
-
-function toggleSound(){
-  const btn = document.getElementById('soundToggle');
-  const label = document.getElementById('soundLabel');
-  if(AudioEngine.isOn()){
-    AudioEngine.stopLoop();
-    btn.classList.remove('on');
-    btn.setAttribute('aria-pressed','false');
-    label.textContent = '🔇 Sound off';
-  } else {
-    AudioEngine.startLoop();
-    btn.classList.add('on');
-    btn.setAttribute('aria-pressed','true');
-    label.textContent = '🔊 Sound on';
-  }
-}
-
 /* ============================================================
    DATA — grounded in the group's real interviews & secondary research
    ============================================================ */
@@ -657,6 +487,8 @@ const INDUSTRIES = {
     startMoney: 100000, startRep: 55, startSus: 55,
     supplierNoun: "mechanical parts",
     rivalNoun: "an overseas parts fabricator",
+    interviewee: "Mr Wang",
+    quote: "no longer \u201cjust competing with several other companies in Singapore\u201d, but with overseas companies too"
   },
   marine: {
     name: "Marine Parts",
@@ -665,6 +497,8 @@ const INDUSTRIES = {
     startMoney: 100000, startRep: 60, startSus: 50,
     supplierNoun: "marine components",
     rivalNoun: "an overseas marine wholesaler",
+    interviewee: "Mr Tan",
+    quote: "there are \u201cno more secrets\u201d left in the business — customers check overseas prices before they even walk in"
   },
   fashion: {
     name: "Fashion Retail",
@@ -673,6 +507,8 @@ const INDUSTRIES = {
     startMoney: 100000, startRep: 50, startSus: 55,
     supplierNoun: "fabric",
     rivalNoun: "an international fast-fashion brand",
+    interviewee: "Mrs Wang",
+    quote: "planning to move into the \u201ce-commerce space in the future\u201d"
   }
 };
 
@@ -685,10 +521,10 @@ const SCENARIOS = [
     body: ind => `An overseas supplier offers you ${ind.supplierNoun} at 20% below what you currently pay — the trade-off is that they're three time zones away, and delivery now depends on cargo routes that have been increasingly disrupted by geopolitical tension.`,
     options:[
       { label:"Accept — switch to the cheaper supplier",
-        effects:{moneyPct:0.10, reputation:0, sustainability:-4, risk:2},
+        effects:{moneyPct:0.10, reputation:0, sustainability:-4, risk:2}, tag:"risk",
         outcome:"Costs drop and margins improve immediately. But your supply chain now runs through more borders than before — one delay, tariff, or dispute away from trouble." },
       { label:"Reject — stay with your local, reliable supplier",
-        effects:{moneyPct:-0.04, reputation:2, sustainability:3, risk:-1},
+        effects:{moneyPct:-0.04, reputation:2, sustainability:3, risk:-1}, tag:"prudence",
         outcome:"Costs stay higher, but deliveries keep arriving on time. Customers notice you rarely run out of stock, even when others do." }
     ]
   },
@@ -698,10 +534,10 @@ const SCENARIOS = [
     body: ind => `A former "nice-to-have," a proper online storefront and social media presence is quickly becoming table stakes for SMEs like yours — but building one well costs money you could otherwise keep as a buffer.`,
     options:[
       { label:"Invest now — build an online storefront and social presence",
-        effects:{moneyPct:-0.12, reputation:6, sustainability:6, risk:0},
+        effects:{moneyPct:-0.12, reputation:6, sustainability:6, risk:0}, tag:"adapt",
         outcome:"It's a real dent in your cash reserves this year, but you're now visible to customers who never would have walked past your shop." },
       { label:"Wait and see — keep relying on walk-in and word-of-mouth",
-        effects:{moneyPct:0.02, reputation:-3, sustainability:-3, risk:1},
+        effects:{moneyPct:0.02, reputation:-3, sustainability:-3, risk:1}, tag:"risk",
         outcome:"You save money in the short term. But you notice competitors' ads showing up everywhere your customers scroll — and you aren't in the feed." }
     ]
   },
@@ -712,13 +548,13 @@ const SCENARIOS = [
     body: ind => `${ind.rivalNoun} starts selling directly to your customers online, at prices you'd struggle to match. Your regulars are starting to ask why your prices are higher.`,
     options:[
       { label:"Match their prices",
-        effects:{moneyPct:-0.16, reputation:1, sustainability:-3, risk:0},
+        effects:{moneyPct:-0.16, reputation:1, sustainability:-3, risk:0}, tag:"risk",
         outcome:"You hold onto customers for now, but thinner margins mean less room to invest in anything else this year." },
       { label:"Improve service instead — faster support, after-sales care, local expertise",
-        effects:{moneyPct:-0.05, reputation:8, sustainability:5, risk:0},
+        effects:{moneyPct:-0.05, reputation:8, sustainability:5, risk:0}, tag:"community",
         outcome:"Some price-sensitive customers still leave. But the ones who stay become loyal, and word starts spreading that you're worth paying a little more for." },
       { label:"Ignore it — trust your existing customer base to stay loyal",
-        effects:{moneyPct:-0.08, reputation:-6, sustainability:-6, risk:1},
+        effects:{moneyPct:-0.08, reputation:-6, sustainability:-6, risk:1}, tag:"risk",
         outcome:"Some long-time customers stay out of habit. But you quietly lose ground you don't immediately notice — until the numbers catch up with you." }
     ]
   },
@@ -728,13 +564,13 @@ const SCENARIOS = [
     body: ind => `Your landlord raises the rent sharply — commercial space is scarce, and demand from bigger, better-funded companies keeps pushing prices up. Renewal is due this month.`,
     options:[
       { label:"Accept the higher rent and stay put",
-        effects:{moneyPct:-0.14, reputation:1, sustainability:0, risk:0},
+        effects:{moneyPct:-0.14, reputation:1, sustainability:0, risk:0}, tag:"community",
         outcome:"It's a heavier fixed cost every month from here on, but your address, and your customers, stay exactly where they were." },
       { label:"Relocate to a cheaper, less central unit",
-        effects:{moneyPct:-0.07, reputation:-5, sustainability:2, risk:0},
+        effects:{moneyPct:-0.07, reputation:-5, sustainability:2, risk:0}, tag:"prudence",
         outcome:"Moving costs money and confuses some customers for a while, but your monthly overheads are lighter going forward." },
       { label:"Try to negotiate a smaller increase",
-        effects:{moneyPct:-0.09, reputation:0, sustainability:1, risk:0},
+        effects:{moneyPct:-0.09, reputation:0, sustainability:1, risk:0}, tag:"prudence",
         outcome:"You manage a partial compromise — not a win, not a loss, but it buys you time to plan your next move." }
     ]
   },
@@ -745,10 +581,10 @@ const SCENARIOS = [
     body: ind => `A government scheme for SME digitalisation and productivity upgrades is now open for applications. It's real money on the table — but paperwork, time, and no guarantee of approval come with it.`,
     options:[
       { label:"Apply for the grant",
-        effects:{moneyPct:0.09, reputation:2, sustainability:5, risk:0, chance:0.75, failEffects:{moneyPct:-0.02, reputation:0, sustainability:-1}},
+        effects:{moneyPct:0.09, reputation:2, sustainability:5, risk:0, chance:0.75, failEffects:{moneyPct:-0.02, reputation:0, sustainability:-1}}, tag:"adapt",
         outcome:"" }, // outcome filled dynamically based on chance
       { label:"Skip it — keep full control and avoid the paperwork",
-        effects:{moneyPct:0, reputation:0, sustainability:-2, risk:0},
+        effects:{moneyPct:0, reputation:0, sustainability:-2, risk:0}, tag:"risk",
         outcome:"You save the hassle, but competitors who applied are now a step ahead on the tools you didn't get help paying for." }
     ]
   },
@@ -758,13 +594,13 @@ const SCENARIOS = [
     body: ind => `Foreign worker levies and wages are climbing across the industry, and your margins are feeling it. Something has to give.`,
     options:[
       { label:"Invest in automation and streamlined processes",
-        effects:{moneyPct:-0.10, reputation:1, sustainability:7, risk:-1},
+        effects:{moneyPct:-0.10, reputation:1, sustainability:7, risk:-1}, tag:"adapt",
         outcome:"It costs you upfront, but your business now runs leaner — less exposed to future wage and levy increases." },
       { label:"Cut staff hours to control costs",
-        effects:{moneyPct:0.05, reputation:-6, sustainability:-3, risk:0},
+        effects:{moneyPct:0.05, reputation:-6, sustainability:-3, risk:0}, tag:"risk",
         outcome:"You save money this year. But service quality slips, and word gets around among both customers and staff." },
       { label:"Absorb the cost and keep things as they are",
-        effects:{moneyPct:-0.11, reputation:2, sustainability:0, risk:0},
+        effects:{moneyPct:-0.11, reputation:2, sustainability:0, risk:0}, tag:"prudence",
         outcome:"Nothing changes for your customers or staff — but your reserves take the hit instead." }
     ]
   },
@@ -775,13 +611,13 @@ const SCENARIOS = [
     body: ind => `Global economic conditions are shaky, and customer demand has become harder to predict — some months are strong, others fall flat with little warning.`,
     options:[
       { label:"Diversify — chase new customer segments and export markets",
-        effects:{moneyPct:-0.08, reputation:3, sustainability:6, risk:1},
+        effects:{moneyPct:-0.08, reputation:3, sustainability:6, risk:1}, tag:"adapt",
         outcome:"You spread your risk across more customers than before, though breaking into new markets takes real effort and money." },
       { label:"Focus tightly on your loyal local base",
-        effects:{moneyPct:0.03, reputation:4, sustainability:1, risk:-1},
+        effects:{moneyPct:0.03, reputation:4, sustainability:1, risk:-1}, tag:"community",
         outcome:"Your core customers appreciate the attention. But you're now more exposed if that one segment ever slows down." },
       { label:"Cut prices to stimulate demand",
-        effects:{moneyPct:-0.13, reputation:-1, sustainability:-2, risk:0},
+        effects:{moneyPct:-0.13, reputation:-1, sustainability:-2, risk:0}, tag:"risk",
         outcome:"Sales pick up briefly, but your margins are thinner than ever, and it's hard to raise prices back up later." }
     ]
   },
@@ -791,13 +627,13 @@ const SCENARIOS = [
     body: ind => `A nearby SME in your line of business shuts its doors for good — one of thousands of local business closures recorded this year. Their old customers are suddenly looking for somewhere new to go.`,
     options:[
       { label:"Push to absorb their former customers",
-        effects:{moneyPct:-0.06, reputation:5, sustainability:4, risk:0},
+        effects:{moneyPct:-0.06, reputation:5, sustainability:4, risk:0}, tag:"community",
         outcome:"A modest marketing push brings some of them your way — but it takes real, sustained effort to earn their loyalty." },
       { label:"Take it as a warning sign and tighten your own operations",
-        effects:{moneyPct:0.04, reputation:0, sustainability:5, risk:-1},
+        effects:{moneyPct:0.04, reputation:0, sustainability:5, risk:-1}, tag:"prudence",
         outcome:"You don't gain new customers immediately, but your business is now leaner and steadier for whatever comes next." },
       { label:"Note it, but change nothing",
-        effects:{moneyPct:0.01, reputation:-1, sustainability:-3, risk:1},
+        effects:{moneyPct:0.01, reputation:-1, sustainability:-3, risk:1}, tag:"risk",
         outcome:"Life goes on as normal — until you realise you never asked why they actually closed." }
     ]
   },
@@ -808,13 +644,13 @@ const SCENARIOS = [
     body: ind => `Five years in, it's time to decide what kind of business you want to be in an increasingly globalised trade sector.`,
     options:[
       { label:"Go global — actively expand into overseas markets",
-        effects:{moneyPct:-0.05, reputation:5, sustainability:6, risk:2},
+        effects:{moneyPct:-0.05, reputation:5, sustainability:6, risk:2}, tag:"risk",
         outcome:"You commit to competing on the same stage as the multinationals that once undercut you — higher reward, but higher exposure to the next shock too." },
       { label:"Go deep — double down on local, niche strengths competitors can't copy",
-        effects:{moneyPct:0.03, reputation:4, sustainability:4, risk:-1},
+        effects:{moneyPct:0.03, reputation:4, sustainability:4, risk:-1}, tag:"community",
         outcome:"You choose depth over reach. Your customers know exactly what you stand for, even if you never become a household name abroad." },
       { label:"Step back — start exploring a sale or exit while the business still has value",
-        effects:{moneyPct:0.08, reputation:-2, sustainability:-2, risk:-2},
+        effects:{moneyPct:0.08, reputation:-2, sustainability:-2, risk:-2}, tag:"prudence",
         outcome:"You protect what you've built rather than gamble it on another five years of uncertainty." }
     ]
   }
@@ -838,7 +674,10 @@ function newState(industryKey){
     scenarioPointer: 0,
     history: [{year:0, money: ind.startMoney, reputation: ind.startRep, sustainability: ind.startSus}],
     closed: false,
-    closedReason: ""
+    closedReason: "",
+    tagCounts: { adapt:0, risk:0, prudence:0, community:0 },
+    choiceLog: [],
+    disruptionCount: 0
   };
 }
 
@@ -854,8 +693,8 @@ function clamp(n, lo, hi){ return Math.max(lo, Math.min(hi, n)); }
    RENDER HELPERS
    ============================================================ */
 const screenEl = document.getElementById('screen');
-function render(html){
-  screenEl.innerHTML = html;
+function render(html, sound){
+  screenEl.innerHTML = `<div class="screen-fade">${html}</div>`;
   window.scrollTo({top:0, behavior:'smooth'});
   requestAnimationFrame(()=>{
     requestAnimationFrame(()=>{
@@ -865,27 +704,186 @@ function render(html){
       });
     });
   });
+  if(sound === 'stamp') sfxStamp();
+  else if(sound === 'success') sfxSuccess();
+  else if(sound === 'fail') sfxFail();
+  else if(sound !== 'none') sfxWhoosh();
+}
+
+/* ============================================================
+   SOUND & MUSIC — synthesised with Web Audio, no audio files
+   ============================================================ */
+let audioCtx = null;
+function getAudioCtx(){
+  try{
+    if(!audioCtx){ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+    if(audioCtx.state === 'suspended'){ audioCtx.resume(); }
+    return audioCtx;
+  }catch(e){ return null; }
+}
+function playTone(opts){
+  const ctx = getAudioCtx();
+  if(!ctx) return;
+  try{
+    const { freq=440, duration=0.08, type='sine', volume=0.07, sweepTo=null, delay=0 } = opts;
+    const startAt = ctx.currentTime + delay;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, startAt);
+    if(sweepTo){ osc.frequency.exponentialRampToValueAtTime(sweepTo, startAt + duration); }
+    gain.gain.setValueAtTime(0.0001, startAt);
+    gain.gain.exponentialRampToValueAtTime(volume, startAt + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startAt + duration);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(startAt);
+    osc.stop(startAt + duration + 0.02);
+  }catch(e){ /* audio not available — fail silently */ }
+}
+function sfxClick(){ playTone({freq:560, duration:0.06, type:'sine', volume:0.14}); }
+function sfxWhoosh(){ playTone({freq:300, duration:0.18, type:'sine', volume:0.11, sweepTo:680}); }
+function sfxStamp(){
+  playTone({freq:90, duration:0.2, type:'square', volume:0.13});
+  playTone({freq:1100, duration:0.06, type:'sine', volume:0.08, delay:0.09});
+}
+function sfxSuccess(){
+  [523.25,659.25,783.99].forEach((f,i)=> playTone({freq:f, duration:0.28, type:'sine', volume:0.12, delay:i*0.09}));
+}
+function sfxFail(){
+  [392,329.63,261.63].forEach((f,i)=> playTone({freq:f, duration:0.34, type:'sine', volume:0.11, delay:i*0.11}));
+}
+
+// event delegation: any click on a .btn or .industry-card plays a soft click,
+// without touching any of the existing onclick="" handlers or game logic.
+document.addEventListener('click', function(e){
+  if(e.target.closest('.btn, .industry-card')){ sfxClick(); }
+}, true);
+
+// ---- ambient background music (fully generated, optional, off by default) ----
+// A slow vi-IV-I-V chord progression with bass pulses and a soft rhythmic
+// tick, meant to evoke a calm "global trade network" backdrop.
+const MUSIC_CHORDS = [
+  { root: 55.00,  notes: [110,    130.81, 164.81] }, // Am
+  { root: 43.65,  notes: [87.31,  110,    130.81] }, // F
+  { root: 65.41,  notes: [130.81, 164.81, 196.00] }, // C
+  { root: 49.00,  notes: [98.00,  123.47, 146.83] }, // G
+];
+let musicOn = false;
+let musicMaster = null;
+let musicPadOscs = [];
+let musicChordTimer = null;
+let musicArpTimer = null;
+let musicTickTimer = null;
+let musicChordIdx = 0;
+
+function toggleMusic(){
+  musicOn = !musicOn;
+  const btn = document.getElementById('musicToggle');
+  if(musicOn){
+    startMusic();
+    if(btn) btn.textContent = '🔊';
+  } else {
+    stopMusic();
+    if(btn) btn.textContent = '🔈';
+  }
+}
+
+function playChord(chord, ctx){
+  if(!musicMaster) return;
+  const old = musicPadOscs;
+  musicPadOscs = [];
+  old.forEach(({o,g})=>{
+    try{ g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.2); o.stop(ctx.currentTime + 1.3); }catch(e){}
+  });
+  chord.notes.forEach(f=>{
+    const o = ctx.createOscillator();
+    o.type = 'sine';
+    o.frequency.value = f;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, ctx.currentTime);
+    o.connect(g).connect(musicMaster);
+    o.start();
+    g.gain.exponentialRampToValueAtTime(1, ctx.currentTime + 2.2);
+    musicPadOscs.push({o,g});
+  });
+  // soft bass pluck on the root, marks the start of each chord
+  playTone({freq: chord.root, duration:1.1, type:'triangle', volume:0.09});
+}
+
+function playNoiseTick(volume, duration){
+  const ctx = getAudioCtx();
+  if(!ctx) return;
+  try{
+    const bufferSize = Math.max(1, Math.floor(ctx.sampleRate * duration));
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0;i<bufferSize;i++){ data[i] = (Math.random()*2-1) * (1 - i/bufferSize); }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 5500;
+    const gain = ctx.createGain();
+    gain.gain.value = volume;
+    noise.connect(hp).connect(gain).connect(ctx.destination);
+    noise.start();
+  }catch(e){}
+}
+
+function startMusic(){
+  const ctx = getAudioCtx();
+  if(!ctx) return;
+  stopMusic();
+  musicMaster = ctx.createGain();
+  musicMaster.gain.value = 0.1;
+  musicMaster.connect(ctx.destination);
+
+  musicChordIdx = 0;
+  playChord(MUSIC_CHORDS[musicChordIdx], ctx);
+
+  // move to the next chord in the progression every 7s
+  musicChordTimer = setInterval(()=>{
+    if(!musicOn) return;
+    musicChordIdx = (musicChordIdx + 1) % MUSIC_CHORDS.length;
+    playChord(MUSIC_CHORDS[musicChordIdx], getAudioCtx());
+  }, 7000);
+
+  // gentle plucked arpeggio drawn from the current chord — distant network pulses
+  musicArpTimer = setInterval(()=>{
+    if(!musicOn) return;
+    const chord = MUSIC_CHORDS[musicChordIdx];
+    const note = chord.notes[Math.floor(Math.random()*chord.notes.length)] * 2;
+    playTone({freq: note, duration:0.8, type:'triangle', volume:0.07});
+  }, 1750);
+
+  // soft rhythmic tick — like a shipping-port pulse, keeps things engaging
+  musicTickTimer = setInterval(()=>{
+    if(!musicOn) return;
+    playNoiseTick(0.05, 0.05);
+  }, 875);
+}
+
+function stopMusic(){
+  [musicChordTimer, musicArpTimer, musicTickTimer].forEach(t=>{ if(t) clearInterval(t); });
+  musicChordTimer = musicArpTimer = musicTickTimer = null;
+  const ctx = getAudioCtx();
+  musicPadOscs.forEach(({o,g})=>{
+    try{
+      if(ctx){ g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.8); o.stop(ctx.currentTime + 0.9); }
+      else { o.stop(); }
+    }catch(e){}
+  });
+  musicPadOscs = [];
+  musicMaster = null;
 }
 
 function routeTrackerHTML(yearIndex){
-  const total = 5;
-  const pct = ((yearIndex-1) / (total-1)) * 100;
-  const ports = Array.from({length: total}, (_, i) => {
-    const p = i+1;
-    const left = (i/(total-1))*100;
-    const cls = p < yearIndex ? 'reached' : (p === yearIndex ? 'reached now' : '');
-    return `<div class="route-port ${cls}" style="left:${left}%;" title="Year ${p}"></div>`;
-  }).join('');
-  return `
-  <div class="route-tracker">
-    <div class="route-track">
-      <div class="route-line"></div>
-      <div class="route-line-fill" data-target-pct="${pct}" data-prop="width" style="width:0%;"></div>
-      ${ports}
-      <div class="route-ship" data-target-pct="${pct}" data-prop="left" style="left:0%;">🚢</div>
-    </div>
-    <div class="route-labels"><span>🏠 Home port</span><span>🌏 Global market</span></div>
-  </div>`;
+  // just show progress as plain text, dont need anything fancy
+  var dots = "";
+  for(var i=1;i<=5;i++){
+    dots += (i<=yearIndex) ? "[X] " : "[ ] ";
+  }
+  return `<p class="mono" style="font-size:12px;">Progress: ${dots}(Year ${yearIndex} of 5)</p>`;
 }
 
 function statusBarHTML(deltas){
@@ -902,8 +900,12 @@ function statusBarHTML(deltas){
   return `
   <div class="statusbar">
     <div class="stat${pulse('money')}"><span class="label">💰 Money</span><span class="value">${fmtMoney(state.money)}</span>${deltaSpan('money', true)}</div>
-    <div class="stat${pulse('reputation')}"><span class="label">🤝 Reputation</span><span class="value">${Math.round(state.reputation)}</span>${deltaSpan('reputation', false)}</div>
-    <div class="stat${pulse('sustainability')}"><span class="label">🌱 Sustainability</span><span class="value">${Math.round(state.sustainability)}</span>${deltaSpan('sustainability', false)}</div>
+    <div class="stat${pulse('reputation')}"><span class="label">🤝 Reputation</span><span class="value">${Math.round(state.reputation)}</span>${deltaSpan('reputation', false)}
+      <div class="bar-track"><div class="bar-fill" data-target-pct="${clamp(state.reputation,0,100)}" style="width:0%"></div></div>
+    </div>
+    <div class="stat sustainability-stat${pulse('sustainability')}"><span class="label">🌱 Sustainability</span><span class="value">${Math.round(state.sustainability)}</span>${deltaSpan('sustainability', false)}
+      <div class="bar-track"><div class="bar-fill" data-target-pct="${clamp(state.sustainability,0,100)}" style="width:0%"></div></div>
+    </div>
   </div>`;
 }
 
@@ -911,7 +913,6 @@ function statusBarHTML(deltas){
    SCREENS
    ============================================================ */
 function screenIntro(){
-  AudioEngine.pageTurn();
   render(`
     <div class="sheet">
       <div class="tab">FILE 01</div>
@@ -926,14 +927,13 @@ function screenIntro(){
       right answer — that's the point.</p>
       <div class="footnote">Made for secondary school students exploring globalisation & SMEs · roughly 5 minutes to play<br>Every scenario is adapted from our group's oral interviews and secondary sources (see final report).</div>
       <div class="btn-row">
-        <button class="btn primary" onclick="screenIndustry()">Begin ▸</button>
+        <button class="btn primary" onclick="screenIndustry()">Begin</button>
       </div>
     </div>
   `);
 }
 
 function screenIndustry(){
-  AudioEngine.pageTurn();
   const cards = Object.entries(INDUSTRIES).map(([key, ind]) => `
     <div class="industry-card" tabindex="0" role="button" onclick="startGame('${key}')" onkeydown="if(event.key==='Enter')startGame('${key}')">
       <div class="industry-icon" aria-hidden="true">${INDUSTRY_ICON[key]}</div>
@@ -975,7 +975,6 @@ function showScenario(lastDeltas){
   }
   const ind = INDUSTRIES[state.industryKey];
   const sc = state.scenarioQueueForYear[state.scenarioPointer];
-  if(state.scenarioPointer === 0){ AudioEngine.shipBell(); } else { AudioEngine.pageTurn(); }
   const optionsHTML = sc.options.map((opt, i) => `
     <button class="btn" onclick="chooseOption(${i})">${String.fromCharCode(65+i)}. ${opt.label}</button>
   `).join("");
@@ -1022,6 +1021,9 @@ function chooseOption(i){
   state.sustainability = clamp(state.sustainability + susDelta, 0, 100);
   state.risk = clamp(state.risk + riskDelta, 0, 100);
 
+  if(opt.tag){ state.tagCounts[opt.tag] = (state.tagCounts[opt.tag] || 0) + 1; }
+  state.choiceLog.push({ year: state.yearIndex, title: sc.title, label: opt.label, moneyDelta, repDelta, susDelta, tag: opt.tag });
+
   const deltas = { money: moneyDelta, reputation: repDelta, sustainability: susDelta };
 
   // supply-chain risk event: chance a stored risk triggers a disruption
@@ -1032,6 +1034,7 @@ function chooseOption(i){
     state.sustainability = clamp(state.sustainability - 3, 0, 100);
     deltas.money -= hit;
     deltas.sustainability -= 3;
+    state.disruptionCount += 1;
     disruptionNote = `<p class="outcome-text" style="color:var(--rust);">⚠ A geopolitical shipping delay hits your supply chain this year, costing you roughly ${fmtMoney(hit)} in disrupted orders.</p>`;
   }
 
@@ -1045,17 +1048,11 @@ function chooseOption(i){
   }
 
   const positives = [moneyDelta>=0, repDelta>=0, susDelta>=0].filter(Boolean).length;
-  const burstSet = positives >= 2 ? ['✨','📈','🌟'] : (positives <= 1 ? ['📉','⚠️','🍂'] : []);
-  const burstHTML = burstSet.map((e,i)=>`<span class="burst-emoji" style="left:${20+i*28}%; top:8px; animation-delay:${i*0.12}s;">${e}</span>`).join('');
-
-  AudioEngine.stampThud(positives >= 2);
-  if(moneyDelta > 0){ setTimeout(() => AudioEngine.coinChime(), 140); }
 
   render(`
     ${statusBarHTML()}
     <div class="sheet outcome-wrap">
       <div class="tab">OUTCOME</div>
-      ${burstHTML}
       <div class="stamp"><span class="stamp-text">${succeeded===false ? "DEFERRED" : (moneyDelta>=0 && susDelta>=0 ? "NOTED" : "PROCESSED")}</span></div>
       <p class="outcome-text">${outcomeText}</p>
       ${disruptionNote}
@@ -1063,10 +1060,10 @@ function chooseOption(i){
       <p class="effect-line ${repDelta>=0?'up':'down'}">${repDelta>=0?'▲':'▼'} 🤝 Reputation: ${repDelta>=0?'+':''}${Math.round(repDelta)}</p>
       <p class="effect-line ${susDelta>=0?'up':'down'}">${susDelta>=0?'▲':'▼'} 🌱 Sustainability: ${susDelta>=0?'+':''}${Math.round(susDelta)}</p>
       <div class="btn-row">
-        <button class="btn primary" onclick="continueAfterOutcome(${JSON.stringify(deltas).replace(/"/g,'&quot;')})">Continue ▸</button>
+        <button class="btn primary" onclick="continueAfterOutcome(${JSON.stringify(deltas).replace(/"/g,'&quot;')})">Continue</button>
       </div>
     </div>
-  `);
+  `, 'stamp');
 }
 
 function continueAfterOutcome(deltas){
@@ -1075,7 +1072,6 @@ function continueAfterOutcome(deltas){
 
 function screenClosed(){
   const ind = INDUSTRIES[state.industryKey];
-  AudioEngine.stampThud(false);
   render(`
     ${statusBarHTML()}
     <div class="sheet outcome-wrap">
@@ -1083,10 +1079,10 @@ function screenClosed(){
       <div class="stamp" style="border-color:var(--stamp); color:var(--stamp);"><span class="stamp-text">🏚️ FOLDED</span></div>
       <p class="outcome-text"><b>${ind.name} — Year ${state.yearIndex}.</b> ${state.closedReason} Your SME joins a growing number of Singaporean businesses that couldn't sustain themselves through the pressures of a globalised market — Singapore recorded around 60,000 business closures in 2025 alone, the highest in eight years.</p>
       <div class="btn-row">
-        <button class="btn primary" onclick="screenFinalReport()">See the full report ▸</button>
+        <button class="btn primary" onclick="screenFinalReport()">See full report</button>
       </div>
     </div>
-  `);
+  `, 'fail');
 }
 
 function verdictFor(){
@@ -1112,7 +1108,7 @@ function lineChartSVG(){
   const repPath = pathFor(p=>p.reputation, yPct);
   const susPath = pathFor(p=>p.sustainability, yPct);
 
-  const yearLabels = years.map((yr,i)=> `<text x="${x(i)}" y="${h-6}" font-size="10" fill="var(--paper-dim)" text-anchor="middle">Y${yr}</text>`).join('');
+  const yearLabels = years.map((yr,i)=> `<text x="${x(i)}" y="${h-6}" font-size="10" fill="var(--ink-2)" text-anchor="middle">Y${yr}</text>`).join('');
 
   return `
   <svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" role="img" aria-label="Chart of money, reputation and sustainability over five years">
@@ -1130,42 +1126,114 @@ function lineChartSVG(){
   </div>`;
 }
 
+const TAG_LABEL = { adapt: "adapting", risk: "risk-taking", prudence: "caution", community: "trust & relationships" };
+
+const TAG_COMMENTARY = {
+  adapt: "More than any other pattern, you leaned into adapting — investing in digital tools, automation, or government schemes whenever the choice came up. That matches something our research kept surfacing: for SMEs today, adapting to a more connected, more competitive market has shifted from a growth strategy to something closer to a survival requirement.",
+  risk: "More than any other pattern, your five years leaned toward higher-risk, higher-reward moves — chasing lower costs or bigger markets even when it meant more exposure. That mirrors a real tension our interviewees described: the same globalisation that opens up new markets also raises the cost of getting a decision wrong.",
+  prudence: "More than any other pattern, you chose the steadier, more controlled option — protecting margins and stability over aggressive growth. Our research suggests this is a legitimate response to globalisation pressure, not a lesser one: staying in business doesn't always have to mean expanding.",
+  community: "More than any other pattern, you protected trust and relationships — investing in service, loyalty, and your local customer base rather than chasing scale. Several of our interviewees pointed to this as one of the few advantages a small, local business still holds over bigger, global competitors."
+};
+
+function dominantTagCommentary(tagCounts){
+  const entries = Object.entries(tagCounts).filter(([,v]) => v > 0).sort((a,b) => b[1]-a[1]);
+  if(entries.length === 0){
+    return "Your five years didn't lean clearly toward any one strategy.";
+  }
+  const topVal = entries[0][1];
+  const tied = entries.filter(([,v]) => v === topVal);
+  if(tied.length > 1){
+    const labels = tied.map(([k]) => TAG_LABEL[k]);
+    return `Your five years didn't lean clearly toward one strategy — you balanced ${labels.join(" and ")} roughly equally. That's arguably the most realistic response: few real SME owners commit to just one approach the whole way through.`;
+  }
+  return TAG_COMMENTARY[entries[0][0]];
+}
+
+function choiceLogHTML(){
+  if(!state.choiceLog.length) return "";
+  const rows = state.choiceLog.map(c => `<li><span class="mono" style="color:var(--ink-2);">Y${c.year}</span> — ${c.title}: <i>${c.label}</i></li>`).join("");
+  return `
+    <h3 style="font-size:0.95rem;margin:22px 0 8px;color:var(--ink-2);">Your five years, decision by decision</h3>
+    <ol style="padding-left:20px; margin:0; font-size:0.88rem; line-height:1.7;">${rows}</ol>`;
+}
+
+function costStoryHTML(ind){
+  const start = ind.startMoney;
+  const end = state.money;
+  const pctChange = ((end - start) / start) * 100;
+  const direction = end >= start ? "grew" : "shrank";
+  const pctText = `${Math.abs(pctChange).toFixed(0)}%`;
+
+  const withDelta = state.choiceLog.filter(c => typeof c.moneyDelta === 'number');
+  let biggestCost = null, biggestGain = null;
+  withDelta.forEach(c => {
+    if(c.moneyDelta < 0 && (!biggestCost || c.moneyDelta < biggestCost.moneyDelta)) biggestCost = c;
+    if(c.moneyDelta > 0 && (!biggestGain || c.moneyDelta > biggestGain.moneyDelta)) biggestGain = c;
+  });
+
+  let costLine, gainLine;
+  costLine = biggestCost
+    ? `The single biggest hit to your reserves came in Year ${biggestCost.year}, when you chose "${biggestCost.label}" (roughly ${fmtMoney(Math.abs(biggestCost.moneyDelta))} out).`
+    : `None of your choices this run cost you money outright — every decision either broke even or brought cash in.`;
+  gainLine = biggestGain
+    ? `Your strongest single year for cash came from "${biggestGain.label}" in Year ${biggestGain.year} (roughly ${fmtMoney(biggestGain.moneyDelta)} in).`
+    : `No single choice this run was a clear cash win — every decision cost you something in the short term.`;
+
+  const closedLine = state.closed
+    ? `The business didn't make it to Year 5 — it closed in Year ${state.yearIndex}. ${state.closedReason}`
+    : `The business made it through all 5 years, with reserves ${direction} by about ${pctText} from where you started.`;
+
+  return `${closedLine} ${costLine} ${gainLine} This is the same pattern our interviews turned up: rising costs are relentless, and even a run of good decisions elsewhere doesn't always fully cancel them out.`;
+}
+
+function tagBreakdownLine(tagCounts){
+  const order = ["adapt","risk","prudence","community"];
+  const parts = order
+    .filter(k => tagCounts[k] > 0)
+    .map(k => `${tagCounts[k]} ${TAG_LABEL[k]}`);
+  if(!parts.length) return "";
+  return `Over your five decisions, that broke down as ${parts.join(", ")}. `;
+}
+
 function screenFinalReport(){
   const ind = INDUSTRIES[state.industryKey];
   const v = verdictFor();
-  AudioEngine.closeBell();
   render(`
     <div class="sheet">
       <div class="tab">FINAL REPORT</div>
       <h2 class="verdict"><span class="verdict-seal">${v.seal}</span>${v.label}</h2>
       <div class="verdict-sub">${ind.name} · ${state.closed ? 'closed in Year '+state.yearIndex : 'operated 5 years'} · ${v.detail}</div>
       ${statusBarHTML()}
-      <h3 style="font-size:0.95rem;margin:18px 0 6px;color:var(--paper-dim);">Five-year trend</h3>
+      <h3 style="font-size:0.95rem;margin:18px 0 6px;color:var(--ink-2);">Five-year trend</h3>
       ${lineChartSVG()}
 
       <h3 style="font-size:1rem;margin:22px 0 6px;">What this reflects from our research</h3>
-      <p class="lede" style="font-size:0.92rem;">This run mirrors our sub-inquiry question — <i>how does globalisation affect the sustainability of SMEs in the business and trade sector?</i> — and draws on three learning points from our actual interviews and secondary sources:</p>
+      <p class="lede" style="font-size:0.92rem;">This run mirrors our sub-inquiry question — <i>how does globalisation affect the sustainability of SMEs in the business and trade sector?</i> — and draws on our actual interviews and secondary sources, based on the ${ind.name} owner you played and the choices you actually made.</p>
 
       <div class="insight-block">
-        <h4>1 — Costs rise faster than most schemes can offset</h4>
-        <p>Rising rental, material, and manpower costs squeezed every business we interviewed, regardless of how well they otherwise adapted.</p>
+        <h4>1 — How your reserves actually moved</h4>
+        <p>${costStoryHTML(ind)}</p>
       </div>
       <div class="insight-block">
-        <h4>2 — Globalisation expands markets, but brings the whole world as a competitor</h4>
-        <p class="quote">Mr Wang put it plainly: he was no longer "just competing with several other companies in Singapore," but with overseas companies too.</p>
+        <h4>2 — ${ind.interviewee}'s experience, echoed in your run</h4>
+        <p class="quote">${ind.interviewee} described ${ind.quote}.</p>
       </div>
       <div class="insight-block">
-        <h4>3 — Adaptation is no longer optional</h4>
-        <p>Mrs Wang described planning to move into the "e-commerce space in the future" — echoing our finding that digital adaptation has shifted from a growth strategy to a survival requirement.</p>
+        <h4>3 — What your five years leaned toward</h4>
+        <p>${tagBreakdownLine(state.tagCounts)}${dominantTagCommentary(state.tagCounts)}</p>
+        ${state.disruptionCount > 0
+          ? `<p style="margin-top:8px;">${state.disruptionCount} time${state.disruptionCount>1?'s':''} during your run, a geopolitical shipping disruption actually hit your supply chain — the kind of risk our research found becomes more likely the more globally-connected a business's supply chain gets.</p>`
+          : `<p style="margin-top:8px;">No supply-chain disruption happened to hit you this run — but the risk was there in the background the whole time, same as it is for real SMEs sourcing overseas.</p>`}
       </div>
+      ${choiceLogHTML()}
 
       <div class="footnote">Simulation for educational purposes, adapted from primary interviews (Mr Wang, Mr Tan, Mrs Wang) and secondary sources including OECD (2023), Taiminen et al. (2021), and the Singapore Business Federation National Business Survey (2024). Figures are illustrative, not real financial data.</div>
 
       <div class="btn-row">
-        <button class="btn primary" onclick="screenIntro()">Play again ▸</button>
+        <button class="btn primary" onclick="screenIntro()">Play again</button>
       </div>
     </div>
-  `);
+  `, state.closed ? 'fail' : (v.label === "Thriving in the Global Market" ? 'success' : 'none'));
 }
 
 /* boot */
