@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Globalisation Ledger — Run an SME</title>
+<title>The Globalisation Ledger: Run an SME</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -475,14 +475,14 @@ h1, h2, h3, h4 {
 
 <script>
 /* ============================================================
-   DATA — grounded in the group's real interviews & secondary research
+   DATA: grounded in the group's real interviews & secondary research
    ============================================================ */
 const INDUSTRY_ICON = { precision: "⚙️", marine: "⚓", fashion: "👔" };
 
 const INDUSTRIES = {
   precision: {
     name: "Precision Engineering",
-    who: "Inspired by Mr Wang (44) — owner of a precision engineering SME",
+    who: "Inspired by Mr Wang (44), owner of a precision engineering SME",
     blurb: "You make mechanical parts for machinery and equipment. Demand for your components is shifting fast, and shipping the raw materials in has become slower and pricier ever since global tensions started disrupting cargo routes.",
     startMoney: 100000, startRep: 55, startSus: 55,
     supplierNoun: "mechanical parts",
@@ -492,17 +492,17 @@ const INDUSTRIES = {
   },
   marine: {
     name: "Marine Parts",
-    who: "Inspired by Mr Tan (51) — owner of a marine parts business",
-    blurb: "You supply parts to boat owners and marinas. Customers can now check overseas prices on their phones before they even walk into your shop — there are, as one owner put it, \"no more secrets\" left in this business.",
+    who: "Inspired by Mr Tan (51), owner of a marine parts business",
+    blurb: "You supply parts to boat owners and marinas. Customers can now check overseas prices on their phones before they even walk into your shop; there are, as one owner put it, \"no more secrets\" left in this business.",
     startMoney: 100000, startRep: 60, startSus: 50,
     supplierNoun: "marine components",
     rivalNoun: "an overseas marine wholesaler",
     interviewee: "Mr Tan",
-    quote: "there are \u201cno more secrets\u201d left in the business — customers check overseas prices before they even walk in"
+    quote: "there are \u201cno more secrets\u201d left in the business, as customers check overseas prices before they even walk in"
   },
   fashion: {
     name: "Fashion Retail",
-    who: "Inspired by Mrs Wang (42) — owner of a menswear SME",
+    who: "Inspired by Mrs Wang (42), owner of a menswear SME",
     blurb: "Your label depends on imported fabric and overseas manufacturing. Trends move quickly, international brands are one scroll away, and customers expect you to look as polished online as the big names do.",
     startMoney: 100000, startRep: 50, startSus: 55,
     supplierNoun: "fabric",
@@ -518,12 +518,12 @@ const SCENARIOS = [
   {
     year:1,
     title:"A cheaper supplier calls",
-    body: ind => `An overseas supplier offers you ${ind.supplierNoun} at 20% below what you currently pay — the trade-off is that they're three time zones away, and delivery now depends on cargo routes that have been increasingly disrupted by geopolitical tension.`,
+    body: ind => `An overseas supplier offers you ${ind.supplierNoun} at 20% below what you currently pay, but the trade-off is that they are three time zones away, and delivery now depends on cargo routes that have been increasingly disrupted by geopolitical tension.`,
     options:[
-      { label:"Accept — switch to the cheaper supplier",
+      { label:"Accept: switch to the cheaper supplier",
         effects:{moneyPct:0.10, reputation:0, sustainability:-4, risk:2}, tag:"risk",
-        outcome:"Costs drop and margins improve immediately. But your supply chain now runs through more borders than before — one delay, tariff, or dispute away from trouble." },
-      { label:"Reject — stay with your local, reliable supplier",
+        outcome:"Costs drop and margins improve immediately. But your supply chain now runs through more borders than before, leaving you one delay, tariff, or dispute away from trouble." },
+      { label:"Reject: stay with your local, reliable supplier",
         effects:{moneyPct:-0.04, reputation:2, sustainability:3, risk:-1}, tag:"prudence",
         outcome:"Costs stay higher, but deliveries keep arriving on time. Customers notice you rarely run out of stock, even when others do." }
     ]
@@ -531,61 +531,61 @@ const SCENARIOS = [
   {
     year:1,
     title:"Going digital, or not yet",
-    body: ind => `A former "nice-to-have," a proper online storefront and social media presence is quickly becoming table stakes for SMEs like yours — but building one well costs money you could otherwise keep as a buffer.`,
+    body: ind => `Once considered a "nice-to-have," a proper online storefront and social media presence is quickly becoming table stakes for SMEs like yours, though building one well costs money you could otherwise keep as a buffer.`,
     options:[
-      { label:"Invest now — build an online storefront and social presence",
+      { label:"Invest now: build an online storefront and social presence",
         effects:{moneyPct:-0.12, reputation:6, sustainability:6, risk:0}, tag:"adapt",
-        outcome:"It's a real dent in your cash reserves this year, but you're now visible to customers who never would have walked past your shop." },
-      { label:"Wait and see — keep relying on walk-in and word-of-mouth",
+        outcome:"It is a real dent in your cash reserves this year, but you are now visible to customers who never would have walked past your shop." },
+      { label:"Wait and see: keep relying on walk-in and word-of-mouth",
         effects:{moneyPct:0.02, reputation:-3, sustainability:-3, risk:1}, tag:"risk",
-        outcome:"You save money in the short term. But you notice competitors' ads showing up everywhere your customers scroll — and you aren't in the feed." }
+        outcome:"You save money in the short term. But you notice competitors' ads showing up everywhere your customers scroll, and you are not in the feed." }
     ]
   },
   // ---------------- YEAR 2 ----------------
   {
     year:2,
     title:"Undercut online",
-    body: ind => `${ind.rivalNoun} starts selling directly to your customers online, at prices you'd struggle to match. Your regulars are starting to ask why your prices are higher.`,
+    body: ind => `${ind.rivalNoun} starts selling directly to your customers online at prices you would struggle to match. Your regulars are starting to ask why your prices are higher.`,
     options:[
       { label:"Match their prices",
         effects:{moneyPct:-0.16, reputation:1, sustainability:-3, risk:0}, tag:"risk",
         outcome:"You hold onto customers for now, but thinner margins mean less room to invest in anything else this year." },
-      { label:"Improve service instead — faster support, after-sales care, local expertise",
+      { label:"Improve service instead: faster support, after-sales care, local expertise",
         effects:{moneyPct:-0.05, reputation:8, sustainability:5, risk:0}, tag:"community",
-        outcome:"Some price-sensitive customers still leave. But the ones who stay become loyal, and word starts spreading that you're worth paying a little more for." },
-      { label:"Ignore it — trust your existing customer base to stay loyal",
+        outcome:"Some price-sensitive customers still leave. But the ones who stay become loyal, and word starts spreading that you are worth paying a little more for." },
+      { label:"Ignore it: trust your existing customer base to stay loyal",
         effects:{moneyPct:-0.08, reputation:-6, sustainability:-6, risk:1}, tag:"risk",
-        outcome:"Some long-time customers stay out of habit. But you quietly lose ground you don't immediately notice — until the numbers catch up with you." }
+        outcome:"Some long-time customers stay out of habit. But you quietly lose ground you do not immediately notice until the numbers catch up with you." }
     ]
   },
   {
     year:2,
     title:"The rent goes up",
-    body: ind => `Your landlord raises the rent sharply — commercial space is scarce, and demand from bigger, better-funded companies keeps pushing prices up. Renewal is due this month.`,
+    body: ind => `Your landlord raises the rent sharply because commercial space is scarce and demand from bigger, better-funded companies keeps pushing prices up. Renewal is due this month.`,
     options:[
       { label:"Accept the higher rent and stay put",
         effects:{moneyPct:-0.14, reputation:1, sustainability:0, risk:0}, tag:"community",
-        outcome:"It's a heavier fixed cost every month from here on, but your address, and your customers, stay exactly where they were." },
+        outcome:"It is a heavier fixed cost every month from here on, but your address and your customers stay exactly where they were." },
       { label:"Relocate to a cheaper, less central unit",
         effects:{moneyPct:-0.07, reputation:-5, sustainability:2, risk:0}, tag:"prudence",
         outcome:"Moving costs money and confuses some customers for a while, but your monthly overheads are lighter going forward." },
       { label:"Try to negotiate a smaller increase",
         effects:{moneyPct:-0.09, reputation:0, sustainability:1, risk:0}, tag:"prudence",
-        outcome:"You manage a partial compromise — not a win, not a loss, but it buys you time to plan your next move." }
+        outcome:"You manage a partial compromise; not a complete win or loss, but it buys you time to plan your next move." }
     ]
   },
   // ---------------- YEAR 3 ----------------
   {
     year:3,
     title:"A government grant opens up",
-    body: ind => `A government scheme for SME digitalisation and productivity upgrades is now open for applications. It's real money on the table — but paperwork, time, and no guarantee of approval come with it.`,
+    body: ind => `A government scheme for SME digitalisation and productivity upgrades is now open for applications. It offers real funding, but it comes with paperwork, time investment, and no guarantee of approval.`,
     options:[
       { label:"Apply for the grant",
         effects:{moneyPct:0.09, reputation:2, sustainability:5, risk:0, chance:0.75, failEffects:{moneyPct:-0.02, reputation:0, sustainability:-1}}, tag:"adapt",
         outcome:"" }, // outcome filled dynamically based on chance
-      { label:"Skip it — keep full control and avoid the paperwork",
+      { label:"Skip it: keep full control and avoid the paperwork",
         effects:{moneyPct:0, reputation:0, sustainability:-2, risk:0}, tag:"risk",
-        outcome:"You save the hassle, but competitors who applied are now a step ahead on the tools you didn't get help paying for." }
+        outcome:"You save the hassle, but competitors who applied are now a step ahead with the tools you chose not to get help funding." }
     ]
   },
   {
@@ -595,63 +595,63 @@ const SCENARIOS = [
     options:[
       { label:"Invest in automation and streamlined processes",
         effects:{moneyPct:-0.10, reputation:1, sustainability:7, risk:-1}, tag:"adapt",
-        outcome:"It costs you upfront, but your business now runs leaner — less exposed to future wage and levy increases." },
+        outcome:"It costs you upfront, but your business now runs leaner and is less exposed to future wage and levy increases." },
       { label:"Cut staff hours to control costs",
         effects:{moneyPct:0.05, reputation:-6, sustainability:-3, risk:0}, tag:"risk",
-        outcome:"You save money this year. But service quality slips, and word gets around among both customers and staff." },
+        outcome:"You save money this year. However, service quality slips, and negative feedback spreads among both customers and staff." },
       { label:"Absorb the cost and keep things as they are",
         effects:{moneyPct:-0.11, reputation:2, sustainability:0, risk:0}, tag:"prudence",
-        outcome:"Nothing changes for your customers or staff — but your reserves take the hit instead." }
+        outcome:"Nothing changes for your customers or staff, but your reserves take the hit instead." }
     ]
   },
   // ---------------- YEAR 4 ----------------
   {
     year:4,
     title:"Demand turns uncertain",
-    body: ind => `Global economic conditions are shaky, and customer demand has become harder to predict — some months are strong, others fall flat with little warning.`,
+    body: ind => `Global economic conditions are shaky, and customer demand has become harder to predict, with some strong months followed by flat periods with little warning.`,
     options:[
-      { label:"Diversify — chase new customer segments and export markets",
+      { label:"Diversify: chase new customer segments and export markets",
         effects:{moneyPct:-0.08, reputation:3, sustainability:6, risk:1}, tag:"adapt",
-        outcome:"You spread your risk across more customers than before, though breaking into new markets takes real effort and money." },
+        outcome:"You spread your risk across more customers than before, though breaking into new markets takes real effort and capital." },
       { label:"Focus tightly on your loyal local base",
         effects:{moneyPct:0.03, reputation:4, sustainability:1, risk:-1}, tag:"community",
-        outcome:"Your core customers appreciate the attention. But you're now more exposed if that one segment ever slows down." },
+        outcome:"Your core customers appreciate the attention. However, you are now more exposed if that specific segment ever slows down." },
       { label:"Cut prices to stimulate demand",
         effects:{moneyPct:-0.13, reputation:-1, sustainability:-2, risk:0}, tag:"risk",
-        outcome:"Sales pick up briefly, but your margins are thinner than ever, and it's hard to raise prices back up later." }
+        outcome:"Sales pick up briefly, but your margins are thinner than ever, making it hard to raise prices back up later." }
     ]
   },
   {
     year:4,
     title:"A competitor closes down",
-    body: ind => `A nearby SME in your line of business shuts its doors for good — one of thousands of local business closures recorded this year. Their old customers are suddenly looking for somewhere new to go.`,
+    body: ind => `A nearby SME in your line of business shuts its doors for good, joining thousands of local business closures recorded this year. Their old customers are suddenly looking for somewhere new to go.`,
     options:[
       { label:"Push to absorb their former customers",
         effects:{moneyPct:-0.06, reputation:5, sustainability:4, risk:0}, tag:"community",
-        outcome:"A modest marketing push brings some of them your way — but it takes real, sustained effort to earn their loyalty." },
+        outcome:"A modest marketing push brings some of them your way, though it takes real, sustained effort to earn their loyalty." },
       { label:"Take it as a warning sign and tighten your own operations",
         effects:{moneyPct:0.04, reputation:0, sustainability:5, risk:-1}, tag:"prudence",
-        outcome:"You don't gain new customers immediately, but your business is now leaner and steadier for whatever comes next." },
+        outcome:"You do not gain new customers immediately, but your business is now leaner and steadier for whatever comes next." },
       { label:"Note it, but change nothing",
         effects:{moneyPct:0.01, reputation:-1, sustainability:-3, risk:1}, tag:"risk",
-        outcome:"Life goes on as normal — until you realise you never asked why they actually closed." }
+        outcome:"Life goes on as normal until you realise you never investigated why they actually closed." }
     ]
   },
   // ---------------- YEAR 5 ----------------
   {
     year:5,
     title:"Choosing where this goes next",
-    body: ind => `Five years in, it's time to decide what kind of business you want to be in an increasingly globalised trade sector.`,
+    body: ind => `Five years in, it is time to decide what kind of business you want to be in an increasingly globalised trade sector.`,
     options:[
-      { label:"Go global — actively expand into overseas markets",
+      { label:"Go global: actively expand into overseas markets",
         effects:{moneyPct:-0.05, reputation:5, sustainability:6, risk:2}, tag:"risk",
-        outcome:"You commit to competing on the same stage as the multinationals that once undercut you — higher reward, but higher exposure to the next shock too." },
-      { label:"Go deep — double down on local, niche strengths competitors can't copy",
+        outcome:"You commit to competing on the same stage as the multinationals that once undercut you, offering higher rewards alongside greater exposure to future shocks." },
+      { label:"Go deep: double down on local, niche strengths competitors cannot copy",
         effects:{moneyPct:0.03, reputation:4, sustainability:4, risk:-1}, tag:"community",
         outcome:"You choose depth over reach. Your customers know exactly what you stand for, even if you never become a household name abroad." },
-      { label:"Step back — start exploring a sale or exit while the business still has value",
+      { label:"Step back: start exploring a sale or exit while the business still has value",
         effects:{moneyPct:0.08, reputation:-2, sustainability:-2, risk:-2}, tag:"prudence",
-        outcome:"You protect what you've built rather than gamble it on another five years of uncertainty." }
+        outcome:"You protect what you have built rather than gamble it on another five years of uncertainty." }
     ]
   }
 ];
@@ -711,7 +711,7 @@ function render(html, sound){
 }
 
 /* ============================================================
-   SOUND & MUSIC — synthesised with Web Audio, no audio files
+   SOUND & MUSIC: synthesised with Web Audio, no audio files
    ============================================================ */
 let audioCtx = null;
 function getAudioCtx(){
@@ -738,7 +738,7 @@ function playTone(opts){
     osc.connect(gain).connect(ctx.destination);
     osc.start(startAt);
     osc.stop(startAt + duration + 0.02);
-  }catch(e){ /* audio not available — fail silently */ }
+  }catch(e){ /* audio not available: fail silently */ }
 }
 function sfxClick(){ playTone({freq:560, duration:0.06, type:'sine', volume:0.14}); }
 function sfxWhoosh(){ playTone({freq:300, duration:0.18, type:'sine', volume:0.11, sweepTo:680}); }
@@ -759,9 +759,7 @@ document.addEventListener('click', function(e){
   if(e.target.closest('.btn, .industry-card')){ sfxClick(); }
 }, true);
 
-// ---- ambient background music (fully generated, optional, off by default) ----
-// A slow vi-IV-I-V chord progression with bass pulses and a soft rhythmic
-// tick, meant to evoke a calm "global trade network" backdrop.
+// ambient background music (fully generated, optional, off by default)
 const MUSIC_CHORDS = [
   { root: 55.00,  notes: [110,    130.81, 164.81] }, // Am
   { root: 43.65,  notes: [87.31,  110,    130.81] }, // F
@@ -848,7 +846,7 @@ function startMusic(){
     playChord(MUSIC_CHORDS[musicChordIdx], getAudioCtx());
   }, 7000);
 
-  // gentle plucked arpeggio drawn from the current chord — distant network pulses
+  // gentle plucked arpeggio drawn from the current chord: distant network pulses
   musicArpTimer = setInterval(()=>{
     if(!musicOn) return;
     const chord = MUSIC_CHORDS[musicChordIdx];
@@ -856,7 +854,7 @@ function startMusic(){
     playTone({freq: note, duration:0.8, type:'triangle', volume:0.07});
   }, 1750);
 
-  // soft rhythmic tick — like a shipping-port pulse, keeps things engaging
+  // soft rhythmic tick: like a shipping port pulse, keeps things engaging
   musicTickTimer = setInterval(()=>{
     if(!musicOn) return;
     playNoiseTick(0.05, 0.05);
@@ -878,7 +876,6 @@ function stopMusic(){
 }
 
 function routeTrackerHTML(yearIndex){
-  // just show progress as plain text, dont need anything fancy
   var dots = "";
   for(var i=1;i<=5;i++){
     dots += (i<=yearIndex) ? "[X] " : "[ ] ";
@@ -919,13 +916,13 @@ function screenIntro(){
       <h2 class="scenario-title">🧭 Run an SME through globalisation</h2>
       <p class="lede">This simulation is built directly from our Social Studies Investigation into
       <b>how globalisation affects the sustainability of Small and Medium Enterprises (SMEs) in the
-      business and trade sector</b> — using real interviews with three Singaporean SME owners and
+      business and trade sector</b>, using real interviews with three Singaporean SME owners and
       secondary research on Singapore's trade and business landscape.</p>
-      <p class="lede">You'll run a small business for five years, making the same kinds of decisions our
+      <p class="lede">You will run a small business for five years while making the same kinds of decisions our
       interviewees actually faced: cheaper overseas suppliers, aggressive online competitors, rising
-      rent, and government support that doesn't always solve the deeper problem. There's no single
-      right answer — that's the point.</p>
-      <div class="footnote">Made for secondary school students exploring globalisation & SMEs · roughly 5 minutes to play<br>Every scenario is adapted from our group's oral interviews and secondary sources (see final report).</div>
+      rent, and government support that does not always solve the deeper problem. There is no single
+      right answer, which is the point.</p>
+      <div class="footnote">Made for secondary school students exploring globalisation and SMEs; roughly 5 minutes to play.<br>Every scenario is adapted from our group's oral interviews and secondary sources (see final report).</div>
       <div class="btn-row">
         <button class="btn primary" onclick="screenIndustry()">Begin</button>
       </div>
@@ -1005,9 +1002,9 @@ function chooseOption(i){
     succeeded = Math.random() < effects.chance;
     if(!succeeded){
       effects = effects.failEffects;
-      outcomeText = "Your application wasn't approved this round — competition for the scheme was fierce. A little time and effort spent, without the funding to show for it.";
+      outcomeText = "Your application was not approved this round because competition for the scheme was fierce. A little time and effort spent left you without the funding to show for it.";
     } else {
-      outcomeText = "The grant comes through. It's not a cure-all, but it takes some pressure off your books and nudges you toward tools you'd been putting off.";
+      outcomeText = "The grant comes through. It is not a cure-all, but it takes some pressure off your books and nudges you toward tools you had been putting off.";
     }
   }
 
@@ -1044,7 +1041,7 @@ function chooseOption(i){
     state.closed = true;
     state.closedReason = state.money <= 0
       ? "Your cash reserves ran out."
-      : "The business became commercially unviable — customers and orders had dried up.";
+      : "The business became commercially unviable because customers and orders had dried up.";
   }
 
   const positives = [moneyDelta>=0, repDelta>=0, susDelta>=0].filter(Boolean).length;
@@ -1077,7 +1074,7 @@ function screenClosed(){
     <div class="sheet outcome-wrap">
       <div class="tab">CLOSURE NOTICE</div>
       <div class="stamp" style="border-color:var(--stamp); color:var(--stamp);"><span class="stamp-text">🏚️ FOLDED</span></div>
-      <p class="outcome-text"><b>${ind.name} — Year ${state.yearIndex}.</b> ${state.closedReason} Your SME joins a growing number of Singaporean businesses that couldn't sustain themselves through the pressures of a globalised market — Singapore recorded around 60,000 business closures in 2025 alone, the highest in eight years.</p>
+      <p class="outcome-text"><b>${ind.name}: Year ${state.yearIndex}.</b> ${state.closedReason} Your SME joins a growing number of Singaporean businesses that could not sustain themselves through the pressures of a globalised market. Singapore recorded around 60,000 business closures in 2025 alone, the highest in eight years.</p>
       <div class="btn-row">
         <button class="btn primary" onclick="screenFinalReport()">See full report</button>
       </div>
@@ -1088,7 +1085,7 @@ function screenClosed(){
 function verdictFor(){
   const score = (state.reputation + state.sustainability) / 2;
   if(state.closed) return {label:"Folded Under Pressure", detail:"The business did not make it through the full five years.", seal:"🏚️"};
-  if(score >= 72) return {label:"Thriving in the Global Market", detail:"Strong reputation and sustainability — this business adapted faster than the pressure arrived.", seal:"🌟"};
+  if(score >= 72) return {label:"Thriving in the Global Market", detail:"Strong reputation and sustainability: this business adapted faster than the pressure arrived.", seal:"🌟"};
   if(score >= 52) return {label:"Surviving, But the Squeeze Continues", detail:"Standing, but still absorbing the costs of a more competitive, more connected market.", seal:"⚖️"};
   return {label:"On the Edge", detail:"Technically still open, but every year has chipped away at its resilience.", seal:"⚠️"};
 }
@@ -1129,29 +1126,29 @@ function lineChartSVG(){
 const TAG_LABEL = { adapt: "adapting", risk: "risk-taking", prudence: "caution", community: "trust & relationships" };
 
 const TAG_COMMENTARY = {
-  adapt: "More than any other pattern, you leaned into adapting — investing in digital tools, automation, or government schemes whenever the choice came up. That matches something our research kept surfacing: for SMEs today, adapting to a more connected, more competitive market has shifted from a growth strategy to something closer to a survival requirement.",
-  risk: "More than any other pattern, your five years leaned toward higher-risk, higher-reward moves — chasing lower costs or bigger markets even when it meant more exposure. That mirrors a real tension our interviewees described: the same globalisation that opens up new markets also raises the cost of getting a decision wrong.",
-  prudence: "More than any other pattern, you chose the steadier, more controlled option — protecting margins and stability over aggressive growth. Our research suggests this is a legitimate response to globalisation pressure, not a lesser one: staying in business doesn't always have to mean expanding.",
-  community: "More than any other pattern, you protected trust and relationships — investing in service, loyalty, and your local customer base rather than chasing scale. Several of our interviewees pointed to this as one of the few advantages a small, local business still holds over bigger, global competitors."
+  adapt: "More than any other pattern, you leaned into adapting by investing in digital tools, automation, or government schemes whenever the choice came up. That matches something our research kept surfacing: for SMEs today, adapting to a more connected and competitive market has shifted from a growth strategy to something closer to a survival requirement.",
+  risk: "More than any other pattern, your five years leaned toward higher-risk, higher-reward moves like chasing lower costs or bigger markets even when it meant more exposure. That mirrors a real tension our interviewees described: the same globalisation that opens up new markets also raises the cost of getting a decision wrong.",
+  prudence: "More than any other pattern, you chose the steadier, more controlled option by protecting margins and stability over aggressive growth. Our research suggests this is a legitimate response to globalisation pressure, not a lesser one, because staying in business does not always have to mean expanding.",
+  community: "More than any other pattern, you protected trust and relationships by investing in service, loyalty, and your local customer base rather than chasing scale. Several of our interviewees pointed to this as one of the few advantages a small, local business still holds over bigger, global competitors."
 };
 
 function dominantTagCommentary(tagCounts){
   const entries = Object.entries(tagCounts).filter(([,v]) => v > 0).sort((a,b) => b[1]-a[1]);
   if(entries.length === 0){
-    return "Your five years didn't lean clearly toward any one strategy.";
+    return "Your five years did not lean clearly toward any one strategy.";
   }
   const topVal = entries[0][1];
   const tied = entries.filter(([,v]) => v === topVal);
   if(tied.length > 1){
     const labels = tied.map(([k]) => TAG_LABEL[k]);
-    return `Your five years didn't lean clearly toward one strategy — you balanced ${labels.join(" and ")} roughly equally. That's arguably the most realistic response: few real SME owners commit to just one approach the whole way through.`;
+    return `Your five years did not lean clearly toward one strategy, as you balanced ${labels.join(" and ")} roughly equally. That is arguably the most realistic response, since few real SME owners commit to just one approach the whole way through.`;
   }
   return TAG_COMMENTARY[entries[0][0]];
 }
 
 function choiceLogHTML(){
   if(!state.choiceLog.length) return "";
-  const rows = state.choiceLog.map(c => `<li><span class="mono" style="color:var(--ink-2);">Y${c.year}</span> — ${c.title}: <i>${c.label}</i></li>`).join("");
+  const rows = state.choiceLog.map(c => `<li><span class="mono" style="color:var(--ink-2);">Y${c.year}</span>: ${c.title}: <i>${c.label}</i></li>`).join("");
   return `
     <h3 style="font-size:0.95rem;margin:22px 0 8px;color:var(--ink-2);">Your five years, decision by decision</h3>
     <ol style="padding-left:20px; margin:0; font-size:0.88rem; line-height:1.7;">${rows}</ol>`;
@@ -1174,16 +1171,16 @@ function costStoryHTML(ind){
   let costLine, gainLine;
   costLine = biggestCost
     ? `The single biggest hit to your reserves came in Year ${biggestCost.year}, when you chose "${biggestCost.label}" (roughly ${fmtMoney(Math.abs(biggestCost.moneyDelta))} out).`
-    : `None of your choices this run cost you money outright — every decision either broke even or brought cash in.`;
+    : `None of your choices this run cost you money outright: every decision either broke even or brought cash in.`;
   gainLine = biggestGain
     ? `Your strongest single year for cash came from "${biggestGain.label}" in Year ${biggestGain.year} (roughly ${fmtMoney(biggestGain.moneyDelta)} in).`
-    : `No single choice this run was a clear cash win — every decision cost you something in the short term.`;
+    : `No single choice this run was a clear cash win: every decision cost you something in the short term.`;
 
   const closedLine = state.closed
-    ? `The business didn't make it to Year 5 — it closed in Year ${state.yearIndex}. ${state.closedReason}`
+    ? `The business did not make it to Year 5, as it closed in Year ${state.yearIndex}. ${state.closedReason}`
     : `The business made it through all 5 years, with reserves ${direction} by about ${pctText} from where you started.`;
 
-  return `${closedLine} ${costLine} ${gainLine} This is the same pattern our interviews turned up: rising costs are relentless, and even a run of good decisions elsewhere doesn't always fully cancel them out.`;
+  return `${closedLine} ${costLine} ${gainLine} This is the same pattern our interviews turned up: rising costs are relentless, and even a run of good decisions elsewhere does not always fully cancel them out.`;
 }
 
 function tagBreakdownLine(tagCounts){
@@ -1208,22 +1205,22 @@ function screenFinalReport(){
       ${lineChartSVG()}
 
       <h3 style="font-size:1rem;margin:22px 0 6px;">What this reflects from our research</h3>
-      <p class="lede" style="font-size:0.92rem;">This run mirrors our sub-inquiry question — <i>how does globalisation affect the sustainability of SMEs in the business and trade sector?</i> — and draws on our actual interviews and secondary sources, based on the ${ind.name} owner you played and the choices you actually made.</p>
+      <p class="lede" style="font-size:0.92rem;">This run mirrors our sub-inquiry question: <i>how does globalisation affect the sustainability of SMEs in the business and trade sector?</i> It draws on our actual interviews and secondary sources, based on the ${ind.name} owner you played and the choices you actually made.</p>
 
       <div class="insight-block">
-        <h4>1 — How your reserves actually moved</h4>
+        <h4>1. How your reserves actually moved</h4>
         <p>${costStoryHTML(ind)}</p>
       </div>
       <div class="insight-block">
-        <h4>2 — ${ind.interviewee}'s experience, echoed in your run</h4>
+        <h4>2. ${ind.interviewee}'s experience, echoed in your run</h4>
         <p class="quote">${ind.interviewee} described ${ind.quote}.</p>
       </div>
       <div class="insight-block">
-        <h4>3 — What your five years leaned toward</h4>
+        <h4>3. What your five years leaned toward</h4>
         <p>${tagBreakdownLine(state.tagCounts)}${dominantTagCommentary(state.tagCounts)}</p>
         ${state.disruptionCount > 0
-          ? `<p style="margin-top:8px;">${state.disruptionCount} time${state.disruptionCount>1?'s':''} during your run, a geopolitical shipping disruption actually hit your supply chain — the kind of risk our research found becomes more likely the more globally-connected a business's supply chain gets.</p>`
-          : `<p style="margin-top:8px;">No supply-chain disruption happened to hit you this run — but the risk was there in the background the whole time, same as it is for real SMEs sourcing overseas.</p>`}
+          ? `<p style="margin-top:8px;">${state.disruptionCount} time${state.disruptionCount>1?'s':''} during your run, a geopolitical shipping disruption actually hit your supply chain; the kind of risk our research found becomes more likely the more globally-connected a business's supply chain gets.</p>`
+          : `<p style="margin-top:8px;">No supply-chain disruption happened to hit you this run, but the risk was there in the background the whole time, same as it is for real SMEs sourcing overseas.</p>`}
       </div>
       ${choiceLogHTML()}
 
